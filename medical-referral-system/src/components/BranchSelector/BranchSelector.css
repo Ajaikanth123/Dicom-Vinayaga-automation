@@ -1,0 +1,101 @@
+.branch-selector-overlay {
+  position: fixed;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(46, 125, 111, 0.95), rgba(30, 93, 79, 0.98));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 3000;
+  padding: 20px;
+}
+
+.branch-selector-modal {
+  background: white;
+  border-radius: 16px;
+  max-width: 420px;
+  width: 100%;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  overflow: hidden;
+  animation: slideUp 0.4s ease;
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(30px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.branch-selector-header {
+  text-align: center;
+  padding: 32px 24px 24px;
+  background: linear-gradient(135deg, var(--primary-color), var(--primary-light));
+  color: white;
+}
+
+.branch-icon {
+  width: 48px;
+  height: 48px;
+  margin-bottom: 12px;
+}
+
+.branch-selector-header h2 {
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.branch-selector-header p {
+  font-size: 14px;
+  opacity: 0.9;
+}
+
+.branch-options {
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.branch-option {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  background: var(--background);
+  border: 2px solid var(--border-color);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.branch-option:hover {
+  border-color: var(--primary-color);
+  background: rgba(46, 125, 111, 0.05);
+  transform: translateX(4px);
+}
+
+.branch-name {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.arrow-icon {
+  width: 20px;
+  height: 20px;
+  color: var(--text-secondary);
+  transition: all 0.2s ease;
+}
+
+.branch-option:hover .arrow-icon {
+  color: var(--primary-color);
+  transform: translateX(4px);
+}

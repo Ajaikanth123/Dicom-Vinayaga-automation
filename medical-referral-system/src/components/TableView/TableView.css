@@ -1,0 +1,479 @@
+.table-container {
+  background: var(--card-bg);
+  border-radius: 12px;
+  box-shadow: var(--shadow);
+  overflow-x: auto;
+  overflow-y: hidden;
+  border: 1px solid var(--border-color);
+  position: relative;
+  width: 100%;
+  max-width: 100%;
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: auto;
+  min-width: 700px;
+}
+
+.data-table th {
+  background: linear-gradient(135deg, var(--primary-color), var(--primary-light));
+  color: white;
+  padding: 14px 12px;
+  text-align: left;
+  font-weight: 600;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  white-space: nowrap;
+  vertical-align: middle;
+}
+
+.data-table th.center-align {
+  text-align: center;
+}
+
+.data-table td {
+  padding: 14px 12px;
+  border-bottom: 1px solid var(--border-color);
+  font-size: 13px;
+  color: var(--text-primary);
+  vertical-align: middle;
+  max-width: 300px;
+}
+
+.data-table td.text-col {
+  text-align: left;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+.data-table td.nowrap {
+  white-space: nowrap;
+}
+
+.data-table td.center-align {
+  text-align: center;
+  white-space: nowrap;
+}
+
+.data-table tbody tr:hover {
+  background: rgba(46, 125, 111, 0.03);
+}
+
+.data-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.actions-col {
+  width: 1%;
+  text-align: center;
+  vertical-align: middle;
+  white-space: nowrap;
+}
+
+.actions-cell {
+  text-align: center;
+  vertical-align: middle;
+  white-space: nowrap;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 6px;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: nowrap;
+  height: 100%;
+  padding: 4px 0;
+}
+
+/* Enhanced Action Buttons - Medical UI Standard */
+.action-btn {
+  min-width: 36px;
+  min-height: 36px;
+  width: 36px;
+  height: 36px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  position: relative;
+  flex-shrink: 0;
+}
+
+.action-btn svg {
+  width: 18px;
+  height: 18px;
+}
+
+.action-btn:hover {
+  transform: scale(1.08);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.action-btn:active {
+  transform: scale(0.95);
+}
+
+/* Tooltip */
+.action-btn::after {
+  content: attr(title);
+  position: absolute;
+  bottom: -32px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #333;
+  color: white;
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 500;
+  white-space: nowrap;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.2s ease;
+  z-index: 100;
+  pointer-events: none;
+}
+
+.action-btn::before {
+  content: '';
+  position: absolute;
+  bottom: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 6px solid transparent;
+  border-bottom-color: #333;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.2s ease;
+  z-index: 100;
+}
+
+.action-btn:hover::after,
+.action-btn:hover::before {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* View Button - Blue */
+.action-btn.view {
+  background: #e3f2fd;
+  color: #1565c0;
+}
+
+.action-btn.view:hover {
+  background: #1565c0;
+  color: white;
+  box-shadow: 0 4px 12px rgba(21, 101, 192, 0.3);
+}
+
+/* Edit Button - Green */
+.action-btn.edit {
+  background: #e8f5e9;
+  color: #2e7d32;
+}
+
+.action-btn.edit:hover {
+  background: #2e7d32;
+  color: white;
+  box-shadow: 0 4px 12px rgba(46, 125, 50, 0.3);
+}
+
+/* Delete/Archive Button - Orange */
+.action-btn.delete {
+  background: #fff3e0;
+  color: #e65100;
+}
+
+.action-btn.delete:hover {
+  background: #e65100;
+  color: white;
+  box-shadow: 0 4px 12px rgba(230, 81, 0, 0.3);
+}
+
+/* Restore Button */
+.action-btn.restore {
+  background: #e8f5e9;
+  color: #388e3c;
+}
+
+.action-btn.restore:hover {
+  background: #388e3c;
+  color: white;
+  box-shadow: 0 4px 12px rgba(56, 142, 60, 0.3);
+}
+
+.table-empty {
+  background: var(--card-bg);
+  border-radius: 12px;
+  padding: 60px 24px;
+  text-align: center;
+  box-shadow: var(--shadow);
+  border: 1px solid var(--border-color);
+}
+
+.empty-icon {
+  width: 64px;
+  height: 64px;
+  color: var(--border-color);
+  margin-bottom: 16px;
+}
+
+.table-empty p {
+  color: var(--text-secondary);
+  font-size: 16px;
+}
+
+@media (max-width: 768px) {
+  .data-table thead {
+    display: none;
+  }
+
+  .data-table tbody tr {
+    display: block;
+    margin-bottom: 16px;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+    overflow: hidden;
+  }
+
+  .data-table td {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--border-color);
+  }
+
+  .data-table td::before {
+    content: attr(data-label);
+    font-weight: 600;
+    color: var(--text-secondary);
+    font-size: 12px;
+    text-transform: uppercase;
+  }
+
+  .actions-cell {
+    justify-content: flex-end;
+  }
+}
+
+
+/* Responsive table adjustments */
+@media (max-width: 1400px) {
+
+  .data-table th,
+  .data-table td {
+    padding: 10px 6px;
+    font-size: 12px;
+  }
+
+  .action-btn {
+    min-width: 32px;
+    min-height: 32px;
+    width: 32px;
+    height: 32px;
+  }
+
+  .action-btn svg {
+    width: 16px;
+    height: 16px;
+  }
+}
+
+@media (max-width: 1200px) {
+
+  .data-table th,
+  .data-table td {
+    padding: 8px 4px;
+    font-size: 11px;
+  }
+}
+
+/* Additional Mobile Improvements */
+@media (max-width: 480px) {
+  .table-container {
+    padding: 12px;
+  }
+
+  .data-table-card {
+    padding: 12px;
+    margin-bottom: 12px;
+  }
+
+  .card-header {
+    padding: 10px;
+  }
+
+  .card-title {
+    font-size: 13px;
+  }
+
+  .card-value {
+    font-size: 12px;
+  }
+
+  .card-actions {
+    padding: 8px;
+    gap: 6px;
+  }
+
+  .card-actions .btn {
+    padding: 6px 10px;
+    font-size: 11px;
+  }
+}
+
+/* Horizontal scroll for tables on small screens */
+@media (max-width: 768px) {
+  .table-wrapper {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .data-table {
+    min-width: 600px;
+  }
+}
+
+/* Perfect Table Alignment Enhancements */
+.data-table {
+  border-spacing: 0;
+}
+
+/* Status Badge Column Specific Styling */
+.data-table .status-column {
+  width: 160px;
+  text-align: center;
+  vertical-align: middle;
+  white-space: nowrap;
+}
+
+/* Badge Wrapper for Perfect Centering */
+.badge-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+}
+
+/* Universal Badge Styling */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 600;
+  white-space: nowrap;
+  height: 32px;
+  min-width: 120px;
+  flex-shrink: 0;
+}
+
+.badge .icon {
+  font-size: 12px;
+  flex-shrink: 0;
+}
+
+.badge .label {
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+/* Badge Color Variants */
+.badge.success {
+  background: #d4edda;
+  color: #155724;
+  border: 1px solid #c3e6cb;
+}
+
+.badge.warning {
+  background: #fff3cd;
+  color: #856404;
+  border: 1px solid #ffeeba;
+}
+
+.badge.danger {
+  background: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+}
+
+.badge.info {
+  background: #d1ecf1;
+  color: #0c5460;
+  border: 1px solid #bee5eb;
+}
+
+.badge.primary {
+  background: #cfe2ff;
+  color: #084298;
+  border: 1px solid #b6d4fe;
+}
+
+/* Column Width Classes - Dynamic with Minimums */
+.col-xs {
+  min-width: 60px;
+}
+
+.col-sm {
+  min-width: 100px;
+}
+
+.col-md {
+  min-width: 140px;
+}
+
+.col-lg {
+  min-width: 180px;
+}
+
+.col-xl {
+  min-width: 220px;
+}
+
+.col-status {
+  min-width: 140px;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.col-actions {
+  min-width: 100px;
+  text-align: center;
+  white-space: nowrap;
+}
+
+/* Text Alignment Utilities */
+.text-left {
+  text-align: left !important;
+}
+
+.text-center {
+  text-align: center !important;
+}
+
+.text-right {
+  text-align: right !important;
+}
+
+/* Prevent Column Shifting */
+.data-table th,
+.data-table td {
+  box-sizing: border-box;
+}
+
+/* Smooth Row Hover */
+.data-table tbody tr {
+  transition: background-color 0.15s ease;
+}

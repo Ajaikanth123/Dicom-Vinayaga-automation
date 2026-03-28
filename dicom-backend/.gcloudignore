@@ -1,0 +1,13 @@
+.gcloudignore
+.git
+node_modules/
+*.log
+*.txt
+*.json.bak
+backend_logs*
+backend_raw*
+gcp_logs*
+dump.txt
+err.txt
+error*.txt
+logs.txt

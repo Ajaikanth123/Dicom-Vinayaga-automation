@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Test MPR Viewer</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 800px;
+      margin: 50px auto;
+      padding: 20px;
+      background: #f5f5f5;
+    }
+    .test-card {
+      background: white;
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    h1 {
+      color: #333;
+      margin-bottom: 20px;
+    }
+    .info {
+      background: #e3f2fd;
+      padding: 15px;
+      border-radius: 4px;
+      margin-bottom: 20px;
+      border-left: 4px solid #2196f3;
+    }
+    .test-link {
+      display: inline-block;
+      padding: 12px 24px;
+      background: #007bff;
+      color: white;
+      text-decoration: none;
+      border-radius: 4px;
+      margin: 10px 10px 10px 0;
+      transition: background 0.3s;
+    }
+    .test-link:hover {
+      background: #0056b3;
+    }
+    .instructions {
+      background: #fff3cd;
+      padding: 15px;
+      border-radius: 4px;
+      margin-top: 20px;
+      border-left: 4px solid #ffc107;
+    }
+    .instructions h3 {
+      margin-top: 0;
+      color: #856404;
+    }
+    .instructions ol {
+      margin: 10px 0;
+      padding-left: 20px;
+    }
+    .instructions li {
+      margin: 8px 0;
+      color: #856404;
+    }
+  </style>
+</head>
+<body>
+  <div class="test-card">
+    <h1>🧪 MPR Viewer Test Page</h1>
+    
+    <div class="info">
+      <strong>Test Case ID:</strong> c8f3a3a1-26ef-4f2b-808d-15ebf605431a<br>
+      <strong>Total Slices:</strong> 576<br>
+      <strong>Patient:</strong> MRS M DEEPA<br>
+      <strong>Frontend Port:</strong> 5174 (changed from 5173)
+    </div>
+
+    <h2>Test Links:</h2>
+    <a href="http://localhost:5174/viewer/c8f3a3a1-26ef-4f2b-808d-15ebf605431a" class="test-link" target="_blank">
+      🔗 Open MPR Viewer
+    </a>
+
+    <div class="instructions">
+      <h3>📋 Testing Instructions:</h3>
+      <ol>
+        <li>Click the "Open MPR Viewer" link above</li>
+        <li>Wait for the page to load - you should see "Single View" and "MPR View" buttons</li>
+        <li>In Single View mode:
+          <ul>
+            <li>Use mouse wheel to scroll through slices</li>
+            <li>Use the slider to navigate</li>
+            <li>Verify all 576 slices load correctly</li>
+          </ul>
+        </li>
+        <li>Click "MPR View" button:
+          <ul>
+            <li>Wait for "Initializing MPR viewports..." message</li>
+            <li>Wait for "Loading 576 images..." message</li>
+            <li>This may take 1-2 minutes to load all images</li>
+            <li>Once loaded, you should see three viewports: Axial, Sagittal, Coronal</li>
+          </ul>
+        </li>
+        <li>Test MPR controls:
+          <ul>
+            <li>Use Axial slider to scroll through axial slices</li>
+            <li>Use Sagittal slider to change sagittal plane</li>
+            <li>Use Coronal slider to change coronal plane</li>
+          </ul>
+        </li>
+      </ol>
+    </div>
+
+    <div class="instructions" style="background: #d4edda; border-left-color: #28a745;">
+      <h3 style="color: #155724;">✅ What Was Fixed:</h3>
+      <ul style="color: #155724;">
+        <li>Fixed element initialization timing - viewports are now enabled sequentially</li>
+        <li>Added proper error checking before displaying images</li>
+        <li>Added loading states for MPR initialization</li>
+        <li>Prevented white screen errors with proper error boundaries</li>
+        <li>Added mprInitialized flag to ensure all viewports are ready before loading images</li>
+      </ul>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,308 @@
+/* ========================================
+   COMPREHENSIVE RESPONSIVE DESIGN
+   Mobile-First Approach
+   ======================================== */
+
+/* ========== ROOT VARIABLES ========== */
+:root {
+  --container-padding: 24px;
+  --section-gap: 24px;
+}
+
+/* ========== MOBILE FIRST (320px+) ========== */
+@media (max-width: 480px) {
+  :root {
+    --container-padding: 12px;
+    --section-gap: 16px;
+  }
+
+  /* Page Container */
+  .page-container {
+    padding: var(--container-padding);
+    max-width: 100%;
+  }
+
+  /* Page Header */
+  .page-title {
+    font-size: 20px;
+  }
+
+  .page-subtitle {
+    font-size: 12px;
+  }
+
+  /* Stepper */
+  .stepper {
+    padding: 12px;
+    gap: 8px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .step {
+    min-width: 70px;
+  }
+
+  .step-number {
+    width: 28px;
+    height: 28px;
+    font-size: 12px;
+  }
+
+  .step-title {
+    font-size: 10px;
+    white-space: nowrap;
+  }
+
+  .step:not(:last-child)::after {
+    top: 14px;
+  }
+
+  /* Form Elements */
+  .form-row {
+    grid-template-columns: 1fr !important;
+    gap: 16px;
+  }
+
+  .form-row-3 {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Buttons */
+  .btn {
+    padding: 10px 16px;
+    font-size: 13px;
+    width: 100%;
+  }
+
+  .form-actions {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .action-left,
+  .action-right {
+    width: 100%;
+    justify-content: stretch;
+  }
+
+  .action-right {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .action-right .btn {
+    width: 100%;
+  }
+
+  /* Modal */
+  .modal-content {
+    width: 95vw;
+    max-width: 95vw;
+    margin: 10px;
+    padding: 20px;
+  }
+
+  .modal-header h2 {
+    font-size: 18px;
+  }
+
+  .modal-actions {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .modal-actions .btn {
+    width: 100%;
+  }
+
+  /* Cards */
+  .card {
+    padding: 16px;
+  }
+
+  /* Search and Filters */
+  .search-filter-section {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .search-box,
+  .filter-group {
+    width: 100%;
+  }
+
+  /* File Upload */
+  .file-upload-box {
+    min-height: 140px;
+    padding: 16px;
+  }
+
+  .file-name {
+    font-size: 13px;
+  }
+
+  .file-size {
+    font-size: 11px;
+  }
+}
+
+/* ========== SMALL TABLETS (481px - 768px) ========== */
+@media (min-width: 481px) and (max-width: 768px) {
+  :root {
+    --container-padding: 16px;
+    --section-gap: 20px;
+  }
+
+  .page-container {
+    padding: var(--container-padding);
+  }
+
+  .page-title {
+    font-size: 24px;
+  }
+
+  .stepper {
+    padding: 16px;
+  }
+
+  .step {
+    min-width: 80px;
+  }
+
+  /* Form rows - 2 columns on tablets */
+  .form-row {
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+
+  /* Keep 1 column for 3-column rows */
+  .form-row-3 {
+    grid-template-columns: 1fr;
+  }
+
+  /* Buttons */
+  .btn {
+    padding: 10px 18px;
+    font-size: 14px;
+  }
+
+  /* Modal */
+  .modal-content {
+    width: 90vw;
+    max-width: 600px;
+    padding: 24px;
+  }
+}
+
+/* ========== TABLETS (769px - 1024px) ========== */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .page-container {
+    padding: 20px;
+    max-width: 95%;
+  }
+
+  .page-title {
+    font-size: 26px;
+  }
+
+  /* Form rows - 2 columns */
+  .form-row {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .form-row-3 {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  /* Modal */
+  .modal-content {
+    width: 85vw;
+    max-width: 700px;
+  }
+}
+
+/* ========== LANDSCAPE PHONES ========== */
+@media (max-height: 500px) and (orientation: landscape) {
+  .modal-content {
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+
+  .stepper {
+    padding: 10px;
+  }
+
+  .step-title {
+    display: none;
+  }
+
+  .form-section {
+    padding: 16px;
+  }
+}
+
+/* ========== TOUCH DEVICES ========== */
+@media (hover: none) and (pointer: coarse) {
+  /* Larger touch targets */
+  .btn {
+    min-height: 44px;
+    padding: 12px 20px;
+  }
+
+  .step {
+    padding: 8px;
+  }
+
+  .step-number {
+    width: 36px;
+    height: 36px;
+  }
+
+  /* Better spacing for touch */
+  .form-row {
+    gap: 20px;
+  }
+
+  /* Larger checkboxes and radio buttons */
+  input[type="checkbox"],
+  input[type="radio"] {
+    width: 20px;
+    height: 20px;
+  }
+}
+
+/* ========== PRINT STYLES ========== */
+@media print {
+  .sidebar,
+  .header-actions,
+  .form-actions,
+  .btn,
+  .modal-overlay {
+    display: none !important;
+  }
+
+  .page-container {
+    max-width: 100%;
+    padding: 0;
+  }
+
+  .main-content {
+    margin-left: 0 !important;
+  }
+
+  .stepper {
+    box-shadow: none;
+    border: 1px solid #ddd;
+  }
+}
+
+/* ========== HIGH DPI SCREENS ========== */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+  /* Sharper borders and shadows */
+  .card,
+  .modal-content,
+  .form-section {
+    border-width: 0.5px;
+  }
+}

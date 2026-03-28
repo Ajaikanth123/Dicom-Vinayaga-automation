@@ -1,0 +1,247 @@
+.upload-progress-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.upload-progress-modal {
+  background: white;
+  border-radius: 16px;
+  padding: 40px;
+  max-width: 500px;
+  width: 90%;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  animation: slideUp 0.4s ease-out;
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(30px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.upload-progress-content {
+  text-align: center;
+}
+
+/* Spinner Animation */
+.upload-spinner {
+  position: relative;
+  width: 100px;
+  height: 100px;
+  margin: 0 auto 30px;
+}
+
+.spinner-ring {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border: 4px solid transparent;
+  border-top-color: #4CAF50;
+  border-radius: 50%;
+  animation: spin 1.5s cubic-bezier(0.68, -0.55, 0.265, 1.55) infinite;
+}
+
+.spinner-ring:nth-child(2) {
+  border-top-color: #2196F3;
+  animation-delay: 0.2s;
+  width: 80%;
+  height: 80%;
+  top: 10%;
+  left: 10%;
+}
+
+.spinner-ring:nth-child(3) {
+  border-top-color: #FF9800;
+  animation-delay: 0.4s;
+  width: 60%;
+  height: 60%;
+  top: 20%;
+  left: 20%;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.upload-title {
+  font-size: 24px;
+  font-weight: 600;
+  color: #333;
+  margin: 0 0 20px 0;
+}
+
+/* Progress Bar */
+.progress-bar-container {
+  width: 100%;
+  height: 40px;
+  background: #f0f0f0;
+  border-radius: 20px;
+  overflow: hidden;
+  margin: 20px 0;
+  position: relative;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.progress-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #4CAF50, #45a049);
+  border-radius: 20px;
+  transition: width 0.3s ease-out;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.progress-bar-fill::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.3),
+    transparent
+  );
+  animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.progress-text {
+  font-size: 16px;
+  font-weight: 700;
+  color: white;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+  position: relative;
+  z-index: 1;
+}
+
+/* File Info */
+.upload-file-info {
+  margin: 20px 0;
+  padding: 15px;
+  background: #f8f9fa;
+  border-radius: 8px;
+}
+
+.current-file {
+  font-size: 14px;
+  color: #555;
+  margin: 0 0 8px 0;
+  word-break: break-all;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.file-icon {
+  font-size: 20px;
+}
+
+.file-count {
+  font-size: 13px;
+  color: #888;
+  margin: 0;
+  font-weight: 500;
+}
+
+.upload-status-message {
+  font-size: 14px;
+  color: #666;
+  margin: 15px 0 0 0;
+  font-style: italic;
+}
+
+/* Progress Icon */
+.progress-icon {
+  font-size: 48px;
+  margin: 10px 0;
+  animation: bounce 2s ease-in-out infinite;
+}
+
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+/* Upload Tip */
+.upload-tip {
+  font-size: 13px;
+  color: #FF9800;
+  margin: 15px 0 0 0;
+  padding: 10px 15px;
+  background: #FFF3E0;
+  border-radius: 8px;
+  border-left: 3px solid #FF9800;
+  font-weight: 500;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .upload-progress-modal {
+    padding: 30px 20px;
+  }
+
+  .upload-title {
+    font-size: 20px;
+  }
+
+  .upload-spinner {
+    width: 80px;
+    height: 80px;
+  }
+
+  .progress-bar-container {
+    height: 35px;
+  }
+
+  .progress-text {
+    font-size: 14px;
+  }
+}

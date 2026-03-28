@@ -1,0 +1,61 @@
+# Dependencies
+node_modules/
+**/node_modules/
+
+# Environment & secrets
+.env
+.env.*
+!.env.production.template
+**/env-vars.yaml
+**/serviceAccountKey.json
+**/*firebase-adminsdk*.json
+
+# Build output
+dist/
+build/
+**/dist/
+**/build/
+
+# Logs
+*.log
+logs/
+*.txt
+*.json
+!package.json
+!package-lock.json
+!firebase.json
+!cors.json
+!gcs-cors.json
+!tsconfig.json
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Large binary/zip files
+*.zip
+*.exe
+*.dll
+*.glb
+*.jpg
+*.jpeg
+*.png
+*.pdf
+*.mo
+
+# Firebase cache
+.firebase/
+
+# Misc
+dump.txt
+backend_raw*.txt
+backend_logs*
+gcp_logs*
+mpr_logs*
+logs.json
+fragments.json
+metadata.json
+info*.json
+iam.json
+sagittal_slice*.jpg
+test_single.jpg

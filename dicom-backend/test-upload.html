@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test DICOM Upload</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input, button {
+            width: 100%;
+            padding: 10px;
+            font-size: 14px;
+        }
+        button {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        button:hover {
+            background: #45a049;
+        }
+        #result {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 5px;
+            display: none;
+        }
+        .success {
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+        }
+        .error {
+            background: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+        }
+        #progress {
+            margin-top: 10px;
+            display: none;
+        }
+        progress {
+            width: 100%;
+            height: 30px;
+        }
+    </style>
+</head>
+<body>
+    <h1>🧪 Test DICOM Backend Upload</h1>
+    <p>This will test if your backend can process DICOM files.</p>
+
+    <form id="uploadForm">
+        <div class="form-group">
+            <label>Branch ID:</label>
+            <input type="text" id="branchId" value="ANBU-SLM-LIC" required>
+        </div>
+
+        <div class="form-group">
+            <label>Case ID:</label>
+            <input type="text" id="caseId" value="TEST-001" required>
+        </div>
+
+        <div class="form-group">
+            <label>Patient Name:</label>
+            <input type="text" id="patientName" value="Test Patient" required>
+        </div>
+
+        <div class="form-group">
+            <label>Patient ID:</label>
+            <input type="text" id="patientId" value="P001" required>
+        </div>
+
+        <div class="form-group">
+            <label>Doctor Name:</label>
+            <input type="text" id="doctorName" value="Dr. Test" required>
+        </div>
+
+        <div class="form-group">
+            <label>Doctor Email:</label>
+            <input type="email" id="doctorEmail" value="your-email@gmail.com" required>
+        </div>
+
+        <div class="form-group">
+            <label>Hospital:</label>
+            <input type="text" id="hospital" value="Test Hospital" required>
+        </div>
+
+        <div class="form-group">
+            <label>DICOM ZIP File:</label>
+            <input type="file" id="dicomFile" accept=".zip" required>
+        </div>
+
+        <div id="progress">
+            <progress id="progressBar" value="0" max="100"></progress>
+            <p id="progressText">0%</p>
+        </div>
+
+        <button type="submit">Upload & Process</button>
+    </form>
+
+    <div id="result"></div>
+
+    <script>
+        document.getElementById('uploadForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const formData = new FormData();
+            const file = document.getElementById('dicomFile').files[0];
+
+            if (!file) {
+                alert('Please select a DICOM ZIP file');
+                return;
+            }
+
+            // Add form fields
+            formData.append('files', file);
+            formData.append('branchId', document.getElementById('branchId').value);
+            formData.append('caseId', document.getElementById('caseId').value);
+            formData.append('patientName', document.getElementById('patientName').value);
+            formData.append('patientId', document.getElementById('patientId').value);
+            formData.append('doctorName', document.getElementById('doctorName').value);
+            formData.append('doctorEmail', document.getElementById('doctorEmail').value);
+            formData.append('hospital', document.getElementById('hospital').value);
+
+            const resultDiv = document.getElementById('result');
+            const progressDiv = document.getElementById('progress');
+            const progressBar = document.getElementById('progressBar');
+            const progressText = document.getElementById('progressText');
+
+            resultDiv.style.display = 'none';
+            progressDiv.style.display = 'block';
+
+            try {
+                const xhr = new XMLHttpRequest();
+
+                xhr.upload.addEventListener('progress', (e) => {
+                    if (e.lengthComputable) {
+                        const percent = Math.round((e.loaded / e.total) * 100);
+                        progressBar.value = percent;
+                        progressText.textContent = `Uploading: ${percent}%`;
+                    }
+                });
+
+                xhr.addEventListener('load', () => {
+                    progressDiv.style.display = 'none';
+                    
+                    if (xhr.status >= 200 && xhr.status < 300) {
+                        const result = JSON.parse(xhr.responseText);
+                        resultDiv.className = 'success';
+                        resultDiv.innerHTML = `
+                            <h3>✅ Success!</h3>
+                            <p><strong>Case ID:</strong> ${result.caseId}</p>
+                            <p><strong>Total Slices:</strong> ${result.dicom?.totalSlices || 'N/A'}</p>
+                            <p><strong>Processed Slices:</strong> ${result.dicom?.processedSlices || 'N/A'}</p>
+                            <p><strong>Viewer URL:</strong> <a href="${result.dicom?.viewerUrl}" target="_blank">${result.dicom?.viewerUrl}</a></p>
+                            <p><strong>Email Sent:</strong> ${result.notifications?.success ? 'Yes ✅' : 'No ❌'}</p>
+                            <pre>${JSON.stringify(result, null, 2)}</pre>
+                        `;
+                        resultDiv.style.display = 'block';
+                    } else {
+                        resultDiv.className = 'error';
+                        resultDiv.innerHTML = `
+                            <h3>❌ Error</h3>
+                            <p>${xhr.responseText}</p>
+                        `;
+                        resultDiv.style.display = 'block';
+                    }
+                });
+
+                xhr.addEventListener('error', () => {
+                    progressDiv.style.display = 'none';
+                    resultDiv.className = 'error';
+                    resultDiv.innerHTML = '<h3>❌ Network Error</h3><p>Could not connect to backend</p>';
+                    resultDiv.style.display = 'block';
+                });
+
+                xhr.open('POST', 'http://localhost:8080/upload');
+                xhr.send(formData);
+
+            } catch (error) {
+                progressDiv.style.display = 'none';
+                resultDiv.className = 'error';
+                resultDiv.innerHTML = `<h3>❌ Error</h3><p>${error.message}</p>`;
+                resultDiv.style.display = 'block';
+            }
+        });
+    </script>
+</body>
+</html>

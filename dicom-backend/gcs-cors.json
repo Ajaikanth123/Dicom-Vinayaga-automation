@@ -1,0 +1,8 @@
+[
+  {
+    "origin": ["https://cscanskovai-44ebc.web.app", "https://cscanskovai-44ebc.firebaseapp.com", "https://frontend-517537048458.asia-south1.run.app", "http://localhost:5173"],
+    "method": ["GET", "HEAD", "PUT", "POST", "DELETE", "OPTIONS"],
+    "responseHeader": ["Content-Type", "Access-Control-Allow-Origin", "x-goog-resumable"],
+    "maxAgeSeconds": 3600
+  }
+]

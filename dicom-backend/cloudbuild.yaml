@@ -1,0 +1,39 @@
+# Google Cloud Build configuration for Cloud Run deployment
+
+steps:
+  # Build the container image
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '-t', 'gcr.io/$PROJECT_ID/dicom-backend:v1-final', '.']
+  
+  # Push the container image to Container Registry
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'gcr.io/$PROJECT_ID/dicom-backend:v1-final']
+  
+  # Deploy container image to Cloud Run
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: gcloud
+    args:
+      - 'run'
+      - 'deploy'
+      - 'dicom-backend'
+      - '--image'
+      - 'gcr.io/$PROJECT_ID/dicom-backend:v1-final'
+      - '--region'
+      - 'asia-south1'
+      - '--platform'
+      - 'managed'
+      - '--allow-unauthenticated'
+      - '--memory'
+      - '2Gi'
+      - '--timeout'
+      - '3600'
+      - '--max-instances'
+      - '10'
+
+images:
+  - 'gcr.io/$PROJECT_ID/dicom-backend:v1-final'
+
+timeout: '1200s'
+
+options:
+  machineType: 'N1_HIGHCPU_8'

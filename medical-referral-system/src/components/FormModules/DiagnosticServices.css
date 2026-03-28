@@ -1,0 +1,45 @@
+.services-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+}
+
+.service-category {
+  background: rgba(46, 125, 111, 0.02);
+  border-radius: 10px;
+  padding: 20px;
+  border: 1px solid rgba(46, 125, 111, 0.1);
+}
+
+.category-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--primary-dark);
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px dashed var(--border-color);
+}
+
+.checkbox-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.reasons-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+}
+
+@media (max-width: 992px) {
+  .services-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .reasons-grid {
+    grid-template-columns: 1fr;
+  }
+}

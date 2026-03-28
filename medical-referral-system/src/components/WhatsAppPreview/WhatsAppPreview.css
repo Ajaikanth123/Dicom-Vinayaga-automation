@@ -1,0 +1,1062 @@
+/* WhatsApp Preview Modal Styles */
+.whatsapp-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 20px;
+  backdrop-filter: blur(4px);
+}
+
+.whatsapp-modal {
+  background: white;
+  border-radius: 16px;
+  width: 100%;
+  max-width: 520px;
+  max-height: 90vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  animation: modalSlideIn 0.3s ease;
+}
+
+/* Wide modal for dual-card layout */
+.whatsapp-modal.whatsapp-modal-wide {
+  max-width: 900px;
+}
+
+@keyframes modalSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Header */
+.whatsapp-modal-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 20px 24px;
+  background: linear-gradient(135deg, #25D366, #128C7E);
+  color: white;
+}
+
+.whatsapp-header-icon {
+  width: 48px;
+  height: 48px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.whatsapp-header-text {
+  flex: 1;
+}
+
+.whatsapp-header-text h2 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.whatsapp-header-text p {
+  margin: 4px 0 0;
+  font-size: 13px;
+  opacity: 0.9;
+}
+
+.whatsapp-close-btn {
+  width: 40px;
+  height: 40px;
+  border: none;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
+  color: white;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.whatsapp-close-btn:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+/* Body */
+.whatsapp-modal-body {
+  padding: 24px;
+  overflow-y: auto;
+  flex: 1;
+}
+
+/* Patient Info Card */
+.whatsapp-patient-info {
+  background: #f8f9fa;
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 16px;
+}
+
+.patient-info-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.patient-info-row:last-child {
+  border-bottom: none;
+}
+
+.info-label {
+  font-size: 13px;
+  color: #6c757d;
+  font-weight: 500;
+}
+
+.info-value {
+  font-size: 14px;
+  color: #212529;
+  font-weight: 600;
+}
+
+.info-value.mono {
+  font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+  letter-spacing: 0.5px;
+}
+
+/* Resend Info */
+.whatsapp-resend-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 16px;
+  background: #fff3cd;
+  border: 1px solid #ffc107;
+  border-radius: 10px;
+  margin-bottom: 16px;
+  font-size: 13px;
+  color: #856404;
+}
+
+.resend-count {
+  margin-left: auto;
+  background: #ffc107;
+  color: #212529;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 12px;
+}
+
+/* Message Preview */
+.whatsapp-message-preview {
+  background: #e7f5e9;
+  border-radius: 12px;
+  overflow: hidden;
+  margin-bottom: 16px;
+  border: 1px solid #c8e6c9;
+}
+
+.message-preview-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 16px;
+  background: #c8e6c9;
+  color: #2e7d32;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.preview-badge {
+  margin-left: auto;
+  background: #2e7d32;
+  color: white;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 500;
+}
+
+.message-content {
+  padding: 16px;
+}
+
+.message-content pre {
+  margin: 0;
+  font-family: inherit;
+  font-size: 14px;
+  line-height: 1.6;
+  color: #212529;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+/* Link Preview */
+.whatsapp-link-preview {
+  background: #e3f2fd;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid #90caf9;
+}
+
+.link-preview-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 16px;
+  background: #90caf9;
+  color: #1565c0;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.secure-badge {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: #1565c0;
+  color: white;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 500;
+}
+
+.link-content {
+  padding: 16px;
+}
+
+.link-content code {
+  font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+  font-size: 13px;
+  color: #1565c0;
+  background: rgba(21, 101, 192, 0.1);
+  padding: 8px 12px;
+  border-radius: 6px;
+  display: block;
+  word-break: break-all;
+}
+
+/* Error Message */
+.whatsapp-error {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 16px;
+  background: #ffebee;
+  border: 1px solid #ef9a9a;
+  border-radius: 10px;
+  margin-top: 16px;
+  color: #c62828;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+/* Footer */
+.whatsapp-modal-footer {
+  display: flex;
+  gap: 12px;
+  padding: 20px 24px;
+  background: #f8f9fa;
+  border-top: 1px solid #e9ecef;
+}
+
+.whatsapp-cancel-btn {
+  flex: 1;
+  padding: 14px 24px;
+  border: 2px solid #dee2e6;
+  background: white;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 600;
+  color: #495057;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.whatsapp-cancel-btn:hover:not(:disabled) {
+  background: #f8f9fa;
+  border-color: #adb5bd;
+}
+
+.whatsapp-cancel-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.whatsapp-send-btn {
+  flex: 1.5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 14px 24px;
+  border: none;
+  background: linear-gradient(135deg, #25D366, #128C7E);
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 600;
+  color: white;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.whatsapp-send-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(37, 211, 102, 0.4);
+}
+
+.whatsapp-send-btn:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.whatsapp-send-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Spinner */
+.spinner {
+  width: 18px;
+  height: 18px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Success Banner */
+.whatsapp-success-banner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 14px 20px;
+  background: linear-gradient(135deg, #4caf50, #45a049);
+  color: white;
+  border-radius: 10px;
+  margin-bottom: 16px;
+  font-weight: 600;
+  font-size: 15px;
+  animation: slideDown 0.3s ease;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Success state for send button */
+.whatsapp-send-btn.success {
+  cursor: default;
+  animation: pulse 0.5s ease;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.02);
+  }
+}
+
+/* Error state for send button */
+.whatsapp-send-btn.error-state {
+  animation: shake 0.5s ease;
+}
+
+@keyframes shake {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  20%, 60% {
+    transform: translateX(-5px);
+  }
+  40%, 80% {
+    transform: translateX(5px);
+  }
+}
+
+/* Disabled state improvements */
+.whatsapp-cancel-btn:disabled,
+.whatsapp-send-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+/* Mobile Responsive */
+@media (max-width: 576px) {
+  .whatsapp-modal-overlay {
+    padding: 10px;
+  }
+
+  .whatsapp-modal {
+    max-height: 95vh;
+  }
+
+  .whatsapp-modal-header {
+    padding: 16px;
+  }
+
+  .whatsapp-header-icon {
+    width: 40px;
+    height: 40px;
+  }
+
+  .whatsapp-header-text h2 {
+    font-size: 16px;
+  }
+
+  .whatsapp-modal-body {
+    padding: 16px;
+  }
+
+  .whatsapp-modal-footer {
+    flex-direction: column;
+    padding: 16px;
+  }
+
+  .whatsapp-cancel-btn,
+  .whatsapp-send-btn {
+    flex: none;
+    width: 100%;
+  }
+}
+
+
+/* WhatsApp Status Badge - Perfect Alignment */
+.wa-status-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 600;
+  white-space: nowrap;
+  height: 32px;
+  min-width: 120px;
+}
+
+.wa-status-icon {
+  font-size: 12px;
+  flex-shrink: 0;
+}
+
+.wa-status-label {
+  white-space: nowrap;
+}
+
+.wa-status-sent {
+  background: #d4edda;
+  color: #155724;
+  border: 1px solid #c3e6cb;
+}
+
+.wa-status-failed {
+  background: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+}
+
+.wa-status-pending {
+  background: #fff3cd;
+  color: #856404;
+  border: 1px solid #ffeeba;
+}
+
+.wa-status-none {
+  background: #e9ecef;
+  color: #6c757d;
+  border: 1px solid #dee2e6;
+}
+
+.wa-resend-indicator {
+  background: rgba(0, 0, 0, 0.15);
+  padding: 1px 6px;
+  border-radius: 10px;
+  font-size: 11px;
+  margin-left: 2px;
+}
+
+/* WhatsApp Action Button */
+.action-btn.whatsapp {
+  background: #dcf8e6;
+  color: #128C7E;
+}
+
+.action-btn.whatsapp:hover {
+  background: #25D366;
+  color: white;
+  box-shadow: 0 4px 12px rgba(37, 211, 102, 0.3);
+}
+
+.action-btn.whatsapp svg {
+  width: 22px;
+  height: 22px;
+}
+
+
+/* Case State Banner */
+.case-state-banner {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 16px;
+  border-radius: 10px;
+  margin-bottom: 16px;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.case-state-banner[data-state="CREATED"] {
+  background: #f5f5f5;
+  color: #666;
+}
+
+.case-state-banner[data-state="DICOM_UPLOADED"],
+.case-state-banner[data-state="REPORT_PENDING"] {
+  background: #fff3e0;
+  color: #e65100;
+}
+
+.case-state-banner[data-state="REPORT_UPLOADED"],
+.case-state-banner[data-state="CASE_COMPLETED"] {
+  background: #e8f5e9;
+  color: #2e7d32;
+}
+
+.case-state-icon {
+  font-size: 18px;
+}
+
+/* Recipient Type Badge */
+.recipient-type-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+
+/* Patient Notice */
+.patient-notice {
+  display: flex;
+  gap: 12px;
+  padding: 14px 16px;
+  background: #e3f2fd;
+  border: 1px solid #90caf9;
+  border-radius: 10px;
+  margin-top: 16px;
+  color: #1565c0;
+}
+
+.patient-notice svg {
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.patient-notice strong {
+  display: block;
+  margin-bottom: 4px;
+  font-size: 14px;
+}
+
+.patient-notice p {
+  margin: 0;
+  font-size: 13px;
+  opacity: 0.9;
+}
+
+/* Link Note */
+.link-note {
+  margin: 8px 0 0;
+  font-size: 12px;
+  color: #666;
+  font-style: italic;
+}
+
+/* Case State Badge (inline) - Perfect Alignment */
+.case-state-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 600;
+  white-space: nowrap;
+  height: 32px;
+  min-width: 120px;
+}
+
+.case-state-badge-icon {
+  font-size: 14px;
+  flex-shrink: 0;
+}
+
+.case-state-badge-label {
+  white-space: nowrap;
+}
+
+.case-state-dicom {
+  background: #e3f2fd;
+  color: #1565c0;
+  border: 1px solid #90caf9;
+}
+
+.case-state-pending {
+  background: #fff3cd;
+  color: #856404;
+  border: 1px solid #ffeeba;
+}
+
+.case-state-complete {
+  background: #d4edda;
+  color: #155724;
+  border: 1px solid #c3e6cb;
+}
+
+.case-state-created {
+  background: #f5f5f5;
+  color: #666;
+  border: 1px solid #ddd;
+}
+
+/* New case state styles */
+.case-state-notified {
+  background: #e8f5e9;
+  color: #2e7d32;
+  border: 1px solid #a5d6a7;
+}
+
+.case-state-report {
+  background: #fff3e0;
+  color: #e65100;
+  border: 1px solid #ffcc80;
+}
+
+/* WhatsApp Status Colors */
+.wa-status-blue {
+  background: #e3f2fd;
+  color: #1565c0;
+  border: 1px solid #90caf9;
+}
+
+.wa-status-orange {
+  background: #fff3e0;
+  color: #e65100;
+  border: 1px solid #ffcc80;
+}
+
+.wa-status-green {
+  background: #d4edda;
+  color: #155724;
+  border: 1px solid #c3e6cb;
+}
+
+.wa-status-yellow {
+  background: #fff3cd;
+  color: #856404;
+  border: 1px solid #ffeeba;
+}
+
+.wa-status-gray {
+  background: #f5f5f5;
+  color: #666;
+  border: 1px solid #ddd;
+}
+
+/* Detailed Status */
+.wa-status-detailed {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.wa-status-details {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.wa-detail-item {
+  font-size: 11px;
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: #f0f0f0;
+  color: #666;
+}
+
+.wa-detail-item.wa-detail-sent {
+  background: #d4edda;
+  color: #155724;
+}
+
+/* Notification Action Buttons */
+.notification-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.notify-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  transition: all 0.2s ease;
+}
+
+.notify-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.notify-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.notify-btn.patient-btn {
+  background: #e3f2fd;
+  color: #1565c0;
+}
+
+.notify-btn.patient-btn:hover:not(:disabled) {
+  background: #1565c0;
+  color: white;
+}
+
+.notify-btn.doctor-dicom-btn {
+  background: #dcf8e6;
+  color: #128C7E;
+}
+
+.notify-btn.doctor-dicom-btn:hover:not(:disabled) {
+  background: #25D366;
+  color: white;
+}
+
+.notify-btn.doctor-report-btn {
+  background: #fff3e0;
+  color: #e65100;
+}
+
+.notify-btn.doctor-report-btn:hover:not(:disabled) {
+  background: #FF9800;
+  color: white;
+}
+
+.notify-btn svg {
+  width: 16px;
+  height: 16px;
+}
+
+.notify-btn-sent {
+  background: #d4edda !important;
+  color: #155724 !important;
+}
+
+
+/* ========================================
+   DUAL PREVIEW CARD LAYOUT
+   ======================================== */
+
+/* Dual Preview Container - Side by Side */
+.dual-preview-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+/* Single Preview Container */
+.single-preview-container {
+  display: block;
+}
+
+/* Preview Card Base */
+.preview-card {
+  background: #fff;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid #e0e0e0;
+  display: flex;
+  flex-direction: column;
+}
+
+.preview-card.full-width {
+  max-width: 100%;
+}
+
+/* Preview Card Header */
+.preview-card-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 16px;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.preview-card-header .card-icon {
+  font-size: 18px;
+}
+
+.preview-card-header .card-title {
+  flex: 1;
+}
+
+.preview-card-header .sent-badge {
+  background: #4caf50;
+  color: white;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 600;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.9); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+/* Patient Header */
+.preview-card-header.patient-header {
+  background: linear-gradient(135deg, #2196F3, #1976D2);
+  color: white;
+}
+
+/* Doctor Header */
+.preview-card-header.doctor-header {
+  background: linear-gradient(135deg, #25D366, #128C7E);
+  color: white;
+}
+
+/* Report Header */
+.preview-card-header.report-header {
+  background: linear-gradient(135deg, #FF9800, #F57C00);
+  color: white;
+}
+
+/* Header for Report Update Modal */
+.whatsapp-modal-header.header-report {
+  background: linear-gradient(135deg, #FF9800, #F57C00) !important;
+}
+
+/* Preview Card Info */
+.preview-card-info {
+  padding: 12px 16px;
+  background: #f8f9fa;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.preview-card-info .info-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 6px 0;
+}
+
+.preview-card-info .info-row:not(:last-child) {
+  border-bottom: 1px solid #e9ecef;
+}
+
+.preview-card-info .label {
+  font-size: 12px;
+  color: #6c757d;
+  font-weight: 500;
+}
+
+.preview-card-info .value {
+  font-size: 13px;
+  color: #212529;
+  font-weight: 600;
+  text-align: right;
+}
+
+.preview-card-info .value.mono {
+  font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+  letter-spacing: 0.5px;
+}
+
+/* Preview Card Message */
+.preview-card-message {
+  padding: 16px;
+  flex: 1;
+  overflow-y: auto;
+  max-height: 200px;
+  background: #fafafa;
+}
+
+.preview-card-message pre {
+  margin: 0;
+  font-family: inherit;
+  font-size: 12px;
+  line-height: 1.5;
+  color: #333;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+/* Preview Card Link */
+.preview-card-link {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 16px;
+  background: #e3f2fd;
+  border-top: 1px solid #90caf9;
+}
+
+.preview-card-link svg {
+  color: #1565c0;
+  flex-shrink: 0;
+}
+
+.preview-card-link code {
+  font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+  font-size: 11px;
+  color: #1565c0;
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.preview-card-link .same-link-badge {
+  background: #1565c0;
+  color: white;
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-size: 10px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+/* Preview Card Note */
+.preview-card-note {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  font-size: 11px;
+  font-weight: 500;
+}
+
+.preview-card-note svg {
+  flex-shrink: 0;
+}
+
+.preview-card-note.patient-note {
+  background: #e3f2fd;
+  color: #1565c0;
+  border-top: 1px solid #90caf9;
+}
+
+.preview-card-note.report-note {
+  background: #fff3e0;
+  color: #e65100;
+  border-top: 1px solid #ffcc80;
+}
+
+/* Report Button Style */
+.whatsapp-send-btn.report-btn {
+  background: linear-gradient(135deg, #FF9800, #F57C00) !important;
+}
+
+.whatsapp-send-btn.report-btn:hover:not(:disabled) {
+  box-shadow: 0 6px 20px rgba(255, 152, 0, 0.4);
+}
+
+/* Mobile Responsive for Dual Cards */
+@media (max-width: 768px) {
+  .whatsapp-modal.whatsapp-modal-wide {
+    max-width: 100%;
+  }
+
+  .dual-preview-container {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .preview-card-message {
+    max-height: 150px;
+  }
+}
+
+@media (max-width: 576px) {
+  .preview-card-header {
+    padding: 12px 14px;
+    font-size: 13px;
+  }
+
+  .preview-card-info {
+    padding: 10px 14px;
+  }
+
+  .preview-card-message {
+    padding: 12px 14px;
+    max-height: 120px;
+  }
+
+  .preview-card-message pre {
+    font-size: 11px;
+  }
+
+  .preview-card-link {
+    padding: 10px 14px;
+  }
+
+  .preview-card-link code {
+    font-size: 10px;
+  }
+}
