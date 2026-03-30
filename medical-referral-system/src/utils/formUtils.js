@@ -17,6 +17,7 @@ export const getInitialFormState = () => ({
     referringDoctor: '',
     diagnosticReport: null,
     dicomFile: null,
+    patientImage: null,
   },
   diagnosticServices: {
     threeDServices: {

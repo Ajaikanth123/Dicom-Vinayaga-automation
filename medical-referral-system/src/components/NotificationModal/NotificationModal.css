@@ -45,7 +45,7 @@
   align-items: center;
   gap: 12px;
   padding: 20px 24px;
-  background: linear-gradient(135deg, #2e7d6f, #3d9d8d);
+  background: linear-gradient(135deg, #80A84D, #3d9d8d);
   color: white;
 }
 
@@ -156,8 +156,8 @@
 }
 
 .channel-toggle.active {
-  border-color: #2e7d6f;
-  background: rgba(46, 125, 111, 0.05);
+  border-color: #80A84D;
+  background: rgba(128, 168, 77, 0.05);
 }
 
 .channel-toggle input {
@@ -386,15 +386,15 @@
   align-items: center;
   gap: 8px;
   padding: 12px 16px;
-  background: rgba(46, 125, 111, 0.08);
+  background: rgba(128, 168, 77, 0.08);
   border-radius: 8px;
   margin-top: 16px;
   font-size: 13px;
-  color: #2e7d6f;
+  color: #80A84D;
 }
 
 .secure-link-info code {
-  background: rgba(46, 125, 111, 0.15);
+  background: rgba(128, 168, 77, 0.15);
   padding: 2px 8px;
   border-radius: 4px;
   font-size: 12px;
@@ -427,7 +427,7 @@
 .inline-alert.alert-success {
   background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
   border-color: #a5d6a7;
-  color: #2e7d32;
+  color: #5e7d38;
 }
 
 .inline-alert.alert-warning {
@@ -541,7 +541,7 @@
   align-items: center;
   gap: 8px;
   padding: 12px 28px;
-  background: linear-gradient(135deg, #2e7d6f, #3d9d8d);
+  background: linear-gradient(135deg, #80A84D, #3d9d8d);
   border: none;
   border-radius: 8px;
   font-size: 14px;
@@ -553,7 +553,7 @@
 
 .send-btn:hover:not(:disabled) {
   transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(46, 125, 111, 0.3);
+  box-shadow: 0 4px 12px rgba(128, 168, 77, 0.3);
 }
 
 .send-btn:disabled {
@@ -626,7 +626,7 @@
 
 .notification-status-badge .channel-status.sent {
   background: rgba(76, 175, 80, 0.15);
-  color: #2e7d32;
+  color: #5e7d38;
 }
 
 .notification-status-badge .channel-status.failed {

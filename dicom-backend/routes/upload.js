@@ -446,94 +446,87 @@ router.post('/process', async (req, res) => {
 
     console.log(`📤 Processing ${dicomFiles.length} extracted DICOM files...`);
 
-    const valid3DSlices = [];
+    const slicesMetadata = [];
     const panoramicUrls = [];
+    let sliceIndex = 0;
+    let firstValidSliceMetadata = null;
+    const UPLOAD_BATCH = 10; // Upload 10 slices in parallel at a time
 
+    // First pass: separate 2D panoramic from 3D slices
+    const valid3D = [];
     for (let i = 0; i < dicomFiles.length; i++) {
       const dicom = dicomFiles[i];
       const sliceMetadata = parseDicomMetadata(dicom.buffer);
       const modality = sliceMetadata?.modality || '';
-
-      // Check using includes() on the string to avoid DICOM padding matches (e.g. "DX ")
       if (modality && (modality.includes('DX') || modality.includes('CR') || modality.includes('SC') || modality.includes('PX'))) {
-        console.log(`🖼️  Extracted 2D ${modality.trim()} Image: ${dicom.filename}`);
         try {
           const jpegBuffer = await dicomToJpeg(dicom.buffer);
           const filename = `pano_${panoramicUrls.length + 1}.jpg`;
-          const panoDestination = `dicom/${branchId}/${caseId}/pano/${filename}`;
-          
-          const url = await uploadToStorage(jpegBuffer, panoDestination, {
-            contentType: 'image/jpeg',
-            originalName: dicom.filename
-          });
-          
-          panoramicUrls.push({ url, filename: dicom.filename, modality });
-        } catch (err) {
-          console.error(`❌ Failed to convert 2D image ${dicom.filename}:`, err);
-        }
+          await uploadToStorage(jpegBuffer, `dicom/${branchId}/${caseId}/pano/${filename}`, { contentType: 'image/jpeg' });
+          panoramicUrls.push({ url: `https://storage.googleapis.com/${process.env.GCS_BUCKET_NAME}/dicom/${branchId}/${caseId}/pano/${filename}`, filename: dicom.filename, modality });
+        } catch (err) { console.error(`❌ Pano convert failed:`, err); }
+        dicom.buffer = null;
       } else {
-        valid3DSlices.push({ dicom, sliceMetadata });
+        if (!firstValidSliceMetadata) firstValidSliceMetadata = sliceMetadata;
+        valid3D.push({ buffer: dicom.buffer, sliceMetadata, filename: dicom.filename });
+        dicom.buffer = null; // free original ref
       }
     }
 
-    console.log(`✅ Extracted ${panoramicUrls.length} Panoramic/2D images.`);
-    console.log(`📤 Uploading ${valid3DSlices.length} 3D Volume Slices...`);
+    console.log(`📤 Uploading ${valid3D.length} 3D slices in parallel batches of ${UPLOAD_BATCH}...`);
 
-    const slicesMetadata = [];
-    const BATCH_SIZE = 50;
+    // Second pass: upload 3D slices in parallel batches
+    for (let batchStart = 0; batchStart < valid3D.length; batchStart += UPLOAD_BATCH) {
+      const batchEnd = Math.min(batchStart + UPLOAD_BATCH, valid3D.length);
+      const batch = valid3D.slice(batchStart, batchEnd);
 
-    for (let batchStart = 0; batchStart < valid3DSlices.length; batchStart += BATCH_SIZE) {
-      const batchEnd = Math.min(batchStart + BATCH_SIZE, valid3DSlices.length);
-      const batchPromises = [];
+      await Promise.all(batch.map(async (item, idx) => {
+        const i = batchStart + idx;
+        const filename = `slice_${String(i + 1).padStart(4, '0')}.dcm`;
+        await uploadToStorage(item.buffer, `dicom/${branchId}/${caseId}/files/${filename}`, { contentType: 'application/dicom' });
+        slicesMetadata.push({
+          index: i + 1, filename,
+          instanceNumber: item.sliceMetadata?.instanceNumber || i + 1,
+          sliceLocation: item.sliceMetadata?.sliceLocation,
+          imagePosition: item.sliceMetadata?.imagePosition
+        });
+        item.buffer = null; // free after upload
+      }));
 
-      for (let i = batchStart; i < batchEnd; i++) {
-        batchPromises.push((async () => {
-          const { dicom, sliceMetadata } = valid3DSlices[i];
-          const filename = `slice_${String(i + 1).padStart(4, '0')}.dcm`;
-
-          await uploadToStorage(dicom.buffer, `dicom/${branchId}/${caseId}/files/${filename}`, {
-            contentType: 'application/dicom'
-          });
-
-          slicesMetadata.push({
-            index: i + 1,
-            filename: filename,
-            instanceNumber: sliceMetadata?.instanceNumber || i + 1,
-            sliceLocation: sliceMetadata?.sliceLocation,
-            imagePosition: sliceMetadata?.imagePosition
-          });
-        })());
+      if (batchEnd % 100 === 0 || batchEnd === valid3D.length) {
+        console.log(`   ${batchEnd}/${valid3D.length} slices uploaded`);
+        await db.ref(`forms/${branchId}/${caseId}`).update({
+          mprStatus: 'processing',
+          mprProgress: { phase: 'Uploading DICOM Slices', current: batchEnd, total: valid3D.length }
+        }).catch(() => {});
       }
-
-      await Promise.all(batchPromises);
-      console.log(`   ${batchEnd}/${valid3DSlices.length}...`);
-      
-      await db.ref(`forms/${branchId}/${caseId}`).update({
-        mprStatus: 'processing',
-        mprProgress: { phase: 'Extracting DICOM Scans', current: batchEnd, total: valid3DSlices.length }
-      }).catch(() => { });
     }
 
-    // Sort by instance number
     slicesMetadata.sort((a, b) => (a.instanceNumber || 0) - (b.instanceNumber || 0));
-    console.log(`✅ Sorted ${slicesMetadata.length} slices by instance number`);
+    console.log(`✅ Processed ${slicesMetadata.length} slices, ${panoramicUrls.length} panoramic images`);
 
-    // Save metadata with slicesMetadata array
-    const firstValidSlice = valid3DSlices[0]?.sliceMetadata || parseDicomMetadata(dicomFiles[0].buffer);
-    
+    const firstValidSlice = firstValidSliceMetadata;
+
     await uploadToStorage(Buffer.from(JSON.stringify({
-      caseId,
-      branchId,
-      totalSlices: valid3DSlices.length,
-      panoramicUrls: panoramicUrls,
+      caseId, branchId,
+      totalSlices: slicesMetadata.length,
+      panoramicUrls,
       dicomBasePath: `dicom/${branchId}/${caseId}/files`,
       bucketName: process.env.GCS_BUCKET_NAME,
       studyMetadata: firstValidSlice,
-      slicesMetadata: slicesMetadata,
+      slicesMetadata,
       uploadedAt: new Date().toISOString()
     }, null, 2)), `dicom/${branchId}/${caseId}/metadata.json`, { contentType: 'application/json' });
 
     const viewerUrl = `${process.env.VIEWER_URL || 'https://cscanskovai-44ebc.web.app/viewer'}/${caseId}`;
+
+    // Fetch patient image URL from Firebase (uploaded in Stage 1)
+    let patientImageUrl = null;
+    try {
+      const db = admin.database();
+      const imgSnap = await db.ref(`forms/${branchId}/${caseId}/patient/patientImage/imageUrl`).once('value');
+      patientImageUrl = imgSnap.val();
+    } catch (e) { /* ignore */ }
 
     // Send notifications
     let notifications = null;
@@ -546,9 +539,10 @@ router.post('/process', async (req, res) => {
           caseId,
           diagnosticServices: diagnosticServices || {},
           reasonForReferral: reasonForReferral || {},
-          clinicalNotes: clinicalNotes || ''
+          clinicalNotes: clinicalNotes || '',
+          patientImageUrl  // Stage 2: include patient image
         },
-        branchId  // Add branchId parameter
+        branchId
       );
     }
 
@@ -587,7 +581,7 @@ router.post('/process', async (req, res) => {
       caseTracking: { caseState: 'DICOM_UPLOADED' },
       dicomData: {
         originalZipPath: zipPath,
-        totalSlices: valid3DSlices.length,
+        totalSlices: slicesMetadata.length,
         viewerUrl,
         dicomBasePath: `dicom/${branchId}/${caseId}/files`,
         bucketName: process.env.GCS_BUCKET_NAME
@@ -598,7 +592,7 @@ router.post('/process', async (req, res) => {
     await file.delete().catch(() => { });
 
     console.log('✅ Complete');
-    res.json({ success: true, dicom: { totalSlices: valid3DSlices.length, viewerUrl }, notifications });
+    res.json({ success: true, dicom: { totalSlices: slicesMetadata.length, viewerUrl }, notifications });
 
     // Fire-and-forget: Generate pre-rendered MPR views in background
     setTimeout(() => {
@@ -610,6 +604,56 @@ router.post('/process', async (req, res) => {
 
   } catch (error) {
     console.error('❌ Error:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+
+/**
+ * POST /patient-image
+ * Upload patient image (Stage 1) and send email to doctor with image attached
+ */
+router.post('/patient-image', upload.single('patientImage'), async (req, res) => {
+  try {
+    const { formId, branchId, patientName, patientId, doctorEmail, doctorName, hospital, clinicalNotes } = req.body;
+    const imageFile = req.file;
+
+    if (!imageFile) return res.status(400).json({ error: 'No image file provided' });
+    if (!formId || !branchId) return res.status(400).json({ error: 'formId and branchId are required' });
+
+    // Upload image to GCS
+    const ext = imageFile.originalname.split('.').pop();
+    const imagePath = `patients/${branchId}/${formId}/patient_image.${ext}`;
+    const imageUrl = await uploadToStorage(imageFile.buffer, imagePath, { contentType: imageFile.mimetype });
+
+    // Save imageUrl to Firebase
+    const db = admin.database();
+    await db.ref(`forms/${branchId}/${formId}/patient/patientImage`).set({
+      imageUrl,
+      uploadedAt: new Date().toISOString()
+    });
+
+    // Send Stage 1 email to doctor with image attached
+    if (doctorEmail) {
+      const { sendDoctorNotification } = await import('../services/emailService.js');
+      await sendDoctorNotification(
+        { doctorName, doctorEmail, hospital },
+        { patientName, patientId },
+        {
+          viewerLink: null,
+          caseId: formId,
+          clinicalNotes: clinicalNotes || '',
+          patientImageUrl: imageUrl,
+          isStage1: true
+        },
+        branchId
+      );
+      console.log(`✅ Stage 1 email sent to doctor: ${doctorEmail}`);
+    }
+
+    res.json({ success: true, imageUrl });
+  } catch (error) {
+    console.error('❌ Patient image upload error:', error);
     res.status(500).json({ error: error.message });
   }
 });
@@ -663,6 +707,16 @@ router.post('/upload-report', upload.single('reportFile'), async (req, res) => {
 
     // Send report notification email using the new fantastic template with PDF attachment
     if (doctorEmail) {
+      // Fetch patient image and viewer link from Firebase for Stage 3 email
+      let patientImageUrl = null;
+      let viewerLink = null;
+      try {
+        const snap = await db.ref(`forms/${branchId}/${formId}`).once('value');
+        const formData = snap.val();
+        patientImageUrl = formData?.patient?.patientImage?.imageUrl || null;
+        viewerLink = formData?.dicomData?.viewerUrl || `${process.env.VIEWER_URL || 'https://cscanskovai-44ebc.web.app/viewer'}/${formId}`;
+      } catch (e) { /* ignore */ }
+
       await sendReportCompletionEmail({
         doctorEmail,
         doctorName,
@@ -670,7 +724,9 @@ router.post('/upload-report', upload.single('reportFile'), async (req, res) => {
         patientId,
         reportUrl,
         branchId,
-        isReplacement: isReplacementBool
+        isReplacement: isReplacementBool,
+        patientImageUrl,
+        viewerLink
       });
       console.log(`📧 Report ${isReplacementBool ? 'replacement' : 'completion'} email with PDF attachment sent to: ${doctorEmail}`);
     }

@@ -222,6 +222,23 @@ export const FormProvider = ({ children }) => {
     const patientId = formData.patient?.patientId || uuidv4().slice(0, 8).toUpperCase();
     const formId = uuidv4();
 
+    // Upload patient image if present (Stage 1)
+    let patientImageUrl = null;
+    const patientImage = formData.patient?.patientImage;
+    if (patientImage instanceof File) {
+      try {
+        console.log('[FormContext] Uploading patient image:', patientImage.name);
+        const { uploadPatientImage } = await import('../services/api');
+        const imgResult = await uploadPatientImage(formId, patientImage, formData, activeBranch);
+        if (imgResult?.imageUrl) {
+          patientImageUrl = imgResult.imageUrl;
+          console.log('[FormContext] Patient image uploaded:', patientImageUrl);
+        }
+      } catch (error) {
+        console.error('[FormContext] Patient image upload failed:', error);
+      }
+    }
+
     // Upload DICOM file if present
     let orthancData = null;
     const dicomFile = formData.patient?.dicomFile;
@@ -280,6 +297,9 @@ export const FormProvider = ({ children }) => {
         ...formData.patient,
         diagnosticReport: getFileMetadata(formData.patient?.diagnosticReport),
         dicomFile: getFileMetadata(formData.patient?.dicomFile),
+        patientImage: patientImageUrl
+          ? { imageUrl: patientImageUrl, uploadedAt: new Date().toISOString() }
+          : getFileMetadata(formData.patient?.patientImage),
       },
       diagnosticServices: { ...formData.diagnosticServices },
       reasonForReferral: { ...formData.reasonForReferral },

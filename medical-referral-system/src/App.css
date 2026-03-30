@@ -5,11 +5,11 @@
 }
 
 :root {
-  --primary-color: #2e7d6f;
-  --primary-light: #4a9d8e;
-  --primary-dark: #1e5d4f;
+  --primary-color: #80A84D;
+  --primary-light: #9bc463;
+  --primary-dark: #5e7d38;
   --secondary-color: #3498db;
-  --accent-color: #27ae60;
+  --accent-color: #80A84D;
   --background: #f8fafb;
   --card-bg: #ffffff;
   --text-primary: #2c3e50;

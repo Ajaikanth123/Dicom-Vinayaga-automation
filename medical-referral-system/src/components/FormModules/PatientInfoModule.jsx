@@ -107,27 +107,27 @@ const PatientInfoModule = ({ data, onChange, errors = {}, disabled = false }) =>
         />
       </div>
 
-      {/* File Upload Section */}
+      {/* File Uploads — both optional */}
       <div className="file-uploads-row">
         <FileUpload
-          title="Upload Diagnostic Report"
-          accept=".pdf,.doc,.docx"
+          title="Upload Patient Image"
+          accept=".jpg,.jpeg,.png,.webp"
           icon="document"
-          file={data.diagnosticReport}
-          onChange={handleFileChange('diagnosticReport')}
-          error={errors.diagnosticReport}
+          file={data.patientImage}
+          onChange={handleFileChange('patientImage')}
+          error={errors.patientImage}
           disabled={disabled}
-          helpText="Accepted: PDF, DOC, DOCX"
+          helpText="Optional — X-ray or photo (JPG, PNG)"
         />
         <FileUpload
-          title="Upload DICOM Files"
+          title="Upload DICOM File"
           accept=".dcm,.zip"
           icon="scan"
           file={data.dicomFile}
           onChange={handleFileChange('dicomFile')}
           error={errors.dicomFile}
           disabled={disabled}
-          helpText="Accepted: DCM or ZIP file"
+          helpText="Optional — DCM or ZIP file"
         />
       </div>
     </FormSection>

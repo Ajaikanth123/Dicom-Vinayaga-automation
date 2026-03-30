@@ -29,7 +29,7 @@ router.get('/settings', async (req, res) => {
         }
       },
       organization: {
-        name: '3D Anbu Dental Diagnostics LLP',
+        name: 'C Scans Kovai',
         email: '',
         phone: '',
         address: '',

@@ -32,7 +32,7 @@ const branchEmailSettings = {
       }
     },
     organization: {
-      name: '3D Anbu Dental Diagnostics LLP - Salem Gugai',
+      name: 'C Scans Kovai - Salem Gugai',
       email: 'anbudentalscans@gmail.com',
       phone: '',
       address: 'Salem Gugai Branch',
@@ -52,7 +52,7 @@ const branchEmailSettings = {
       }
     },
     organization: {
-      name: '3D Anbu Dental Diagnostics LLP - Salem LIC',
+      name: 'C Scans Kovai - Salem LIC',
       email: 'anbudentalscans@gmail.com',
       phone: '',
       address: 'Salem LIC Branch',
@@ -72,7 +72,7 @@ const branchEmailSettings = {
       }
     },
     organization: {
-      name: '3D Anbu Dental Diagnostics LLP - Ramanathapuram',
+      name: 'C Scans Kovai - Ramanathapuram',
       email: '3danbudentalscansramnadu2@gmail.com',
       phone: '+919360421853',
       address: 'Ramanathapuram Branch',
@@ -92,7 +92,7 @@ const branchEmailSettings = {
       }
     },
     organization: {
-      name: '3D Anbu Dental Diagnostics LLP - Hosur',
+      name: 'C Scans Kovai - Hosur',
       email: '3danbuscanshosur2@gmail.com',
       phone: '+919345845378',
       address: 'Hosur Branch',

@@ -1137,7 +1137,7 @@ const DicomViewerWithMPR = () => {
                   <path d="M22 12h-4l-3 9L9 3l-3 9H2" />
                 </svg>
               </div>
-              <span className="viewer-title">3D Anbu Viewer</span>
+              <span className="viewer-title">C Scans Kovai</span>
             </div>
 
             <div className="header-quick-info">

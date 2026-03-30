@@ -5,10 +5,10 @@
 }
 
 .service-category {
-  background: rgba(46, 125, 111, 0.02);
+  background: rgba(128, 168, 77, 0.02);
   border-radius: 10px;
   padding: 20px;
-  border: 1px solid rgba(46, 125, 111, 0.1);
+  border: 1px solid rgba(128, 168, 77, 0.1);
 }
 
 .category-title {

@@ -86,7 +86,7 @@
 .step.active .step-number {
   background: var(--primary-color);
   color: white;
-  box-shadow: 0 0 0 4px rgba(46, 125, 111, 0.2);
+  box-shadow: 0 0 0 4px rgba(128, 168, 77, 0.2);
 }
 
 .step.completed .step-number {
@@ -156,9 +156,9 @@
 }
 
 .btn-primary {
-  background: linear-gradient(135deg, #2e7d6f 0%, #3d9b8a 100%);
+  background: linear-gradient(135deg, #80A84D 0%, #6a9040 100%);
   color: white;
-  box-shadow: 0 2px 8px rgba(46, 125, 111, 0.25);
+  box-shadow: 0 2px 8px rgba(128, 168, 77, 0.25);
   position: relative;
   overflow: hidden;
 }
@@ -179,16 +179,16 @@
 }
 
 .btn-primary svg {
-  color: #1a4d44;
+  color: #4a6b2a;
 }
 
 .btn-primary svg path {
-  fill: #1a4d44;
+  fill: #4a6b2a;
 }
 
 .btn-primary:hover {
-  background: linear-gradient(135deg, #267063 0%, #2e7d6f 100%);
-  box-shadow: 0 4px 16px rgba(46, 125, 111, 0.4);
+  background: linear-gradient(135deg, #6a9040 0%, #80A84D 100%);
+  box-shadow: 0 4px 16px rgba(128, 168, 77, 0.4);
   transform: translateY(-2px);
 }
 
@@ -224,17 +224,17 @@
 }
 
 .btn-doctor-save {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #80A84D 0%, #5e7d38 100%);
   color: white;
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+  box-shadow: 0 2px 8px rgba(128, 168, 77, 0.3);
 }
 
 .btn-doctor-save:hover:not(:disabled) {
   transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+  box-shadow: 0 4px 12px rgba(128, 168, 77, 0.4);
 }
 
 .btn-doctor-save:disabled {
@@ -312,7 +312,7 @@
   width: 18px;
   height: 18px;
   cursor: pointer;
-  accent-color: var(--primary-color, #2e7d6f);
+  accent-color: var(--primary-color, #80A84D);
 }
 
 .manage-forms-table-wrap .data-table th:first-child,
@@ -364,7 +364,7 @@
 .scan-badge {
   display: inline-block;
   padding: 4px 10px;
-  background: rgba(46, 125, 111, 0.1);
+  background: rgba(128, 168, 77, 0.1);
   color: var(--primary-color);
   border-radius: 20px;
   font-size: 12px;
@@ -543,7 +543,7 @@
 
 .branch-card:hover {
   border-color: var(--primary-color);
-  box-shadow: 0 4px 20px rgba(46, 125, 111, 0.15);
+  box-shadow: 0 4px 20px rgba(128, 168, 77, 0.15);
   transform: translateY(-2px);
 }
 
@@ -580,7 +580,7 @@
 .branch-card-count {
   text-align: center;
   padding: 8px 16px;
-  background: rgba(46, 125, 111, 0.1);
+  background: rgba(128, 168, 77, 0.1);
   border-radius: 8px;
 }
 
@@ -785,7 +785,7 @@
 }
 
 .patients-table tr:hover {
-  background: rgba(46, 125, 111, 0.03);
+  background: rgba(128, 168, 77, 0.03);
 }
 
 /* Actions column - minimal width */
@@ -851,11 +851,11 @@
 
 .dicom-btn {
   background: #e8f5e9;
-  color: #2e7d32;
+  color: #5e7d38;
 }
 
 .dicom-btn:hover:not(.disabled) {
-  background: #2e7d32;
+  background: #5e7d38;
   color: white;
 }
 
@@ -966,11 +966,11 @@
 /* Edit Button - Green */
 .action-btn.edit {
   background: #e8f5e9;
-  color: #2e7d32;
+  color: #5e7d38;
 }
 
 .action-btn.edit:hover {
-  background: #2e7d32;
+  background: #5e7d38;
   color: white;
 }
 
@@ -1245,7 +1245,7 @@
 .search-input:focus {
   outline: none;
   border-color: var(--primary-color);
-  box-shadow: 0 0 0 3px rgba(46, 125, 111, 0.1);
+  box-shadow: 0 0 0 3px rgba(128, 168, 77, 0.1);
 }
 
 .search-input::placeholder {
@@ -1337,7 +1337,7 @@
 
 .filter-results-info {
   padding: 10px 16px;
-  background: rgba(46, 125, 111, 0.1);
+  background: rgba(128, 168, 77, 0.1);
   color: var(--primary-color);
   border-radius: 8px;
   font-size: 14px;
@@ -1525,15 +1525,15 @@
 
 /* Notification Button - Primary */
 .action-btn.notify {
-  background: rgba(46, 125, 111, 0.1);
-  color: #2e7d6f;
+  background: rgba(128, 168, 77, 0.1);
+  color: #80A84D;
   cursor: pointer;
 }
 
 .action-btn.notify:hover {
-  background: #2e7d6f;
+  background: #80A84D;
   color: white;
-  box-shadow: 0 4px 12px rgba(46, 125, 111, 0.3);
+  box-shadow: 0 4px 12px rgba(128, 168, 77, 0.3);
 }
 
 /* Report Notification Button */
@@ -1725,7 +1725,7 @@
   font-size: 14px;
   font-weight: 600;
   color: var(--primary-color);
-  background: rgba(46, 125, 111, 0.1);
+  background: rgba(128, 168, 77, 0.1);
   padding: 4px 10px;
   border-radius: 6px;
 }
@@ -1766,7 +1766,7 @@
 
 .upload-dropzone:hover {
   border-color: var(--primary-color);
-  background: rgba(46, 125, 111, 0.05);
+  background: rgba(128, 168, 77, 0.05);
 }
 
 .upload-placeholder {
@@ -1843,7 +1843,7 @@
   margin-bottom: 20px;
   font-size: 15px;
   font-weight: 600;
-  color: #2e7d32;
+  color: #5e7d38;
 }
 
 .notify-message-preview {

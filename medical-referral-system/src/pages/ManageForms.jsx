@@ -35,6 +35,12 @@ const ManageForms = () => {
   });
   const fileInputRef = useRef(null);
 
+  // DICOM Upload Modal State
+  const [dicomUploadModal, setDicomUploadModal] = useState({
+    open: false, form: null, isUploading: false, uploadedFile: null,
+  });
+  const dicomFileInputRef = useRef(null);
+
   // Search and filter state - Initialize from URL parameters
   const [searchQuery, setSearchQuery] = useState(searchParams.get('search') || '');
   const [dateFrom, setDateFrom] = useState(searchParams.get('from') || '');
@@ -197,6 +203,57 @@ const ManageForms = () => {
       uploadedFile: null,
       isReplacing
     });
+  };
+
+  // DICOM Upload Handlers
+  const handleOpenDicomUpload = (form) => {
+    setDicomUploadModal({ open: true, form, isUploading: false, uploadedFile: null });
+  };
+
+  const handleCloseDicomUpload = () => {
+    setDicomUploadModal({ open: false, form: null, isUploading: false, uploadedFile: null });
+    if (dicomFileInputRef.current) dicomFileInputRef.current.value = '';
+  };
+
+  const handleDicomFileSelect = (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    if (!file.name.match(/\.(zip|dcm)$/i)) {
+      setToast({ show: true, message: 'Please select a ZIP or DCM file.', type: 'error' });
+      return;
+    }
+    setDicomUploadModal(prev => ({ ...prev, uploadedFile: file }));
+  };
+
+  const handleDicomUploadConfirm = async () => {
+    if (!dicomUploadModal.uploadedFile || !dicomUploadModal.form) return;
+    setDicomUploadModal(prev => ({ ...prev, isUploading: true }));
+    try {
+      const { uploadDicomFile } = await import('../services/api');
+      const form = dicomUploadModal.form;
+      const result = await uploadDicomFile(
+        dicomUploadModal.uploadedFile,
+        { patientName: form.patient?.patientName, patientId: form.patient?.patientId },
+        { doctorName: form.doctor?.doctorName, hospital: form.doctor?.hospital, doctorPhone: form.doctor?.doctorPhone, emailWhatsapp: form.doctor?.emailWhatsapp },
+        form.branchId || currentBranch,
+        form.id,
+        null,
+        form.diagnosticServices,
+        form.reasonForReferral,
+        form.clinicalNotes
+      );
+      if (result?.dicom) {
+        reloadForms();
+        setToast({ show: true, message: 'DICOM uploaded! Doctor notified.', type: 'success' });
+        handleCloseDicomUpload();
+      } else {
+        throw new Error('Upload failed');
+      }
+    } catch (error) {
+      console.error('DICOM upload error:', error);
+      setToast({ show: true, message: 'Failed to upload DICOM. Please try again.', type: 'error' });
+      setDicomUploadModal(prev => ({ ...prev, isUploading: false }));
+    }
   };
 
   const handleCloseReportUpload = () => {
@@ -395,36 +452,23 @@ const ManageForms = () => {
 
   // Determine notification action based on status and actual file uploads
   const getNotificationAction = (row) => {
-    // Check actual file data
-    const hasDicom = hasFileData(row.patient?.dicomFile);
+    const hasDicom = hasFileData(row.patient?.dicomFile) || !!row.dicomData;
     const hasReport = hasFileData(row.patient?.diagnosticReport);
+    const hasImage = !!row.patient?.patientImage?.imageUrl;
 
-    // Determine action based solely on file presence, since user wants to share multiple times
-    if (!hasDicom) {
-      return {
-        type: null,
-        label: 'Upload DICOM',
-        icon: 'none',
-        enabled: false,
-        reason: 'NO_DICOM'
-      };
+    // Always allow notification if any content exists
+    if (!hasImage && !hasDicom && !hasReport) {
+      return { type: null, label: 'No content', icon: 'none', enabled: false, reason: 'NO_CONTENT' };
     }
 
     if (hasReport) {
-      return {
-        type: MESSAGE_TYPES.REPORT_UPDATE,
-        label: 'Send Notification',
-        icon: 'notify',
-        enabled: true
-      };
+      return { type: MESSAGE_TYPES.REPORT_UPDATE, label: 'Send Notification', icon: 'notify', enabled: true };
     }
-
-    return {
-      type: MESSAGE_TYPES.INITIAL_SEND,
-      label: 'Send Notification',
-      icon: 'notify',
-      enabled: true
-    };
+    if (hasDicom) {
+      return { type: MESSAGE_TYPES.INITIAL_SEND, label: 'Send Notification', icon: 'notify', enabled: true };
+    }
+    // Image only (Stage 1)
+    return { type: MESSAGE_TYPES.INITIAL_SEND, label: 'Send Notification', icon: 'notify', enabled: true };
   };
 
   const handleNotificationClick = (form) => {
@@ -463,12 +507,8 @@ const ManageForms = () => {
     const action = getNotificationAction(form);
 
     if (!action.enabled) {
-      if (action.reason === 'NO_DICOM') {
-        setToast({
-          show: true,
-          message: 'Please upload DICOM file before sending notifications.',
-          type: 'error'
-        });
+      if (action.reason === 'NO_CONTENT') {
+        setToast({ show: true, message: 'Please upload a patient image first.', type: 'error' });
       }
       return;
     }
@@ -647,6 +687,58 @@ const ManageForms = () => {
       key: 'caseStatus',
       label: 'Case Status',
       render: (_, row) => <CaseStateBadge caseState={row.caseTracking?.caseState} channelStatus={row.channelStatus} />,
+    },
+    {
+      key: 'image',
+      label: 'Image',
+      render: (_, row) => {
+        const imageUrl = row.patient?.patientImage?.imageUrl;
+        return imageUrl ? (
+          <button
+            className="file-action-btn view-report"
+            style={{ background: '#e8f5e9', color: '#2e7d32' }}
+            onClick={(e) => { e.stopPropagation(); window.open(imageUrl, '_blank'); }}
+            title="View Patient Image"
+          >
+            <svg viewBox="0 0 24 24" width="16" height="16">
+              <path fill="currentColor" d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z" />
+            </svg>
+            View
+          </button>
+        ) : (
+          <span style={{ color: '#bdbdbd', fontSize: '13px' }}>—</span>
+        );
+      },
+    },
+    {
+      key: 'dicom',
+      label: 'DICOM',
+      render: (_, row) => {
+        const hasDicom = hasFileData(row.patient?.dicomFile) || !!row.dicomData;
+        return hasDicom ? (
+          <button
+            className="file-action-btn view-report"
+            onClick={(e) => { e.stopPropagation(); navigate(`/viewer/${row.id}`); }}
+            title="View DICOM"
+          >
+            <svg viewBox="0 0 24 24" width="16" height="16">
+              <path fill="currentColor" d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z" />
+            </svg>
+            View
+          </button>
+        ) : (
+          <button
+            className="file-action-btn upload-report"
+            onClick={(e) => { e.stopPropagation(); handleOpenDicomUpload(row); }}
+            title="Upload DICOM"
+          >
+            <svg viewBox="0 0 24 24" width="16" height="16">
+              <path fill="currentColor" d="M9 16h6v-6h4l-7-7-7 7h4v6zm-4 2h14v2H5v-2z" />
+            </svg>
+            Upload
+          </button>
+        );
+      },
     },
     {
       key: 'report',
@@ -1135,6 +1227,68 @@ const ManageForms = () => {
 
           <div className="note" style={{ marginTop: '20px', background: '#e3f2fd', borderLeft: '4px solid #2196f3', padding: '15px', borderRadius: '8px' }}>
             <strong>📧 Note:</strong> The doctor will automatically receive an email notification with the PDF report attached once you upload it.
+          </div>
+        </div>
+      </Modal>
+
+      {/* DICOM Upload Modal */}
+      <Modal
+        isOpen={dicomUploadModal.open}
+        onClose={handleCloseDicomUpload}
+        title="Upload DICOM File"
+        actions={
+          <>
+            <button className="btn btn-outline" onClick={handleCloseDicomUpload} disabled={dicomUploadModal.isUploading}>Cancel</button>
+            <button
+              className="btn btn-primary"
+              onClick={handleDicomUploadConfirm}
+              disabled={!dicomUploadModal.uploadedFile || dicomUploadModal.isUploading}
+            >
+              {dicomUploadModal.isUploading ? 'Uploading...' : 'Upload & Notify Doctor'}
+            </button>
+          </>
+        }
+      >
+        <div className="report-upload-content">
+          {dicomUploadModal.form && (
+            <div className="upload-patient-info">
+              <div className="patient-badge">
+                <span className="patient-id">{dicomUploadModal.form.patient?.patientId}</span>
+                <span className="patient-name">{dicomUploadModal.form.patient?.patientName}</span>
+              </div>
+              <div className="doctor-info">
+                <span>Referring Doctor: Dr. {dicomUploadModal.form.doctor?.doctorName}</span>
+              </div>
+            </div>
+          )}
+          <div className="upload-area">
+            <input
+              ref={dicomFileInputRef}
+              type="file"
+              accept=".zip,.dcm"
+              onChange={handleDicomFileSelect}
+              className="file-input-hidden"
+              id="dicom-file-input"
+            />
+            <label htmlFor="dicom-file-input" className="upload-dropzone">
+              {dicomUploadModal.uploadedFile ? (
+                <div className="file-selected">
+                  <svg viewBox="0 0 24 24" width="40" height="40"><path fill="#4CAF50" d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z" /></svg>
+                  <span className="file-name">{dicomUploadModal.uploadedFile.name}</span>
+                  <span className="file-size">{(dicomUploadModal.uploadedFile.size / 1024 / 1024).toFixed(1)} MB</span>
+                  <button type="button" className="change-file-btn" onClick={(e) => { e.preventDefault(); dicomFileInputRef.current?.click(); }}>Change File</button>
+                </div>
+              ) : (
+                <div className="upload-placeholder">
+                  <svg viewBox="0 0 24 24" width="48" height="48"><path fill="#9e9e9e" d="M9 16h6v-6h4l-7-7-7 7h4v6zm-4 2h14v2H5v-2z" /></svg>
+                  <span className="upload-text">Click to select DICOM file</span>
+                  <span className="upload-hint">Accepted: ZIP or DCM file</span>
+                </div>
+              )}
+            </label>
+          </div>
+          <div className="note" style={{ marginTop: '20px', background: '#e8f5e9', borderLeft: '4px solid #4CAF50', padding: '15px', borderRadius: '8px' }}>
+            <strong>📧 Note:</strong> Doctor will receive an email with the patient image + DICOM viewer link after upload.
           </div>
         </div>
       </Modal>

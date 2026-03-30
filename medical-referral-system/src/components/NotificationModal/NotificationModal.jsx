@@ -162,12 +162,17 @@ const NotificationModal = ({
 
   const scanDate = patient.patient?.date || new Date().toLocaleDateString('en-IN');
 
-  // Generate viewer link - use local OHIF viewer with StudyInstanceUID
+  // Generate viewer link
   const studyInstanceUID = patient.orthancData?.studyInstanceUID || patient.orthancData?.parentStudy;
+  const viewerUrl = `https://frontend-517537048458.asia-south1.run.app/viewer/${patient.id}`;
   const secureLink = studyInstanceUID
     ? `http://localhost:3000/viewer?StudyInstanceUIDs=${studyInstanceUID}`
-    : patient.caseTracking?.secureLink ||
-    `https://dicom.anbu-dental.com/case/${patient.id?.slice(0, 8) || 'xxxxxxxx'}`;
+    : patient.dicomData?.viewerUrl || viewerUrl;
+
+  // Detect current stage
+  const hasDicom = !!(patient.patient?.dicomFile?.hasFile || patient.dicomData);
+  const hasReport = !!(patient.patient?.diagnosticReport?.hasFile || patient.patient?.diagnosticReport?.reportUrl);
+  const patientImageUrl = patient.patient?.patientImage?.imageUrl || null;
 
   const isInitialSend = messageType === MESSAGE_TYPES.INITIAL_SEND;
   const isReportUpdate = messageType === MESSAGE_TYPES.REPORT_UPDATE;
@@ -374,9 +379,14 @@ ${secureLink}
     };
 
     const caseData = {
-      viewerLink: secureLink,
+      viewerLink: hasDicom ? secureLink : null,
       scanDate: scanDate,
-      caseId: patient.id
+      caseId: patient.id,
+      patientImageUrl: patientImageUrl,
+      isStage1: !hasDicom && !hasReport,
+      diagnosticServices: patient.diagnosticServices || patient.patient?.diagnosticServices,
+      reasonForReferral: patient.reasonForReferral || patient.patient?.reasonForReferral,
+      clinicalNotes: patient.clinicalNotes || ''
     };
 
     // WhatsApp send promise - WATI Direct API Call

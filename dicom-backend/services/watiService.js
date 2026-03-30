@@ -89,7 +89,7 @@ async function sendDicomNotification(doctorPhone, doctorName, patientName, study
     // WATI template parameters - numbered {{1}}, {{2}}, etc.
     // Include header if template has one
     const parameters = [
-      { name: 'header', value: '3D Anbu Scans' },  // Header text
+      { name: 'header', value: 'C Scans Kovai' },  // Header text
       { name: '1', value: String(doctorName) },
       { name: '2', value: String(patientName) },
       { name: '3', value: String(studyType) },

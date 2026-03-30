@@ -52,8 +52,8 @@
 
 .search-bar input:focus {
   outline: none;
-  border-color: #667eea;
-  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+  border-color: #80A84D;
+  box-shadow: 0 0 0 3px rgba(128, 168, 77, 0.1);
 }
 
 .doctors-grid {
@@ -88,7 +88,7 @@
 .doctor-avatar {
   width: 60px;
   height: 60px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #80A84D 0%, #5e7d38 100%);
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -117,7 +117,7 @@
 }
 
 .hospital {
-  color: #667eea;
+  color: #80A84D;
   font-size: 0.875rem;
   margin: 0 0 0.75rem 0;
   font-weight: 500;
@@ -188,7 +188,7 @@
 }
 
 .btn-icon:hover svg {
-  color: #667eea;
+  color: #80A84D;
 }
 
 .btn-delete:hover {
@@ -210,7 +210,7 @@
   width: 48px;
   height: 48px;
   border: 4px solid #f3f3f3;
-  border-top: 4px solid #667eea;
+  border-top: 4px solid #80A84D;
   border-radius: 50%;
   animation: spin 1s linear infinite;
   margin: 0 auto 1rem;
@@ -239,7 +239,7 @@
 }
 
 .btn-primary {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #80A84D 0%, #5e7d38 100%);
   color: white;
   border: none;
   padding: 0.75rem 1.5rem;
@@ -255,7 +255,7 @@
 
 .btn-primary:hover {
   transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+  box-shadow: 0 4px 12px rgba(128, 168, 77, 0.3);
 }
 
 .btn-icon svg {
@@ -351,8 +351,8 @@
 
 .form-group input:focus {
   outline: none;
-  border-color: #667eea;
-  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+  border-color: #80A84D;
+  box-shadow: 0 0 0 3px rgba(128, 168, 77, 0.1);
 }
 
 .form-group input.error {
@@ -440,7 +440,7 @@
 .view-avatar {
   width: 80px;
   height: 80px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #80A84D 0%, #5e7d38 100%);
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -490,7 +490,7 @@
 .view-icon {
   width: 20px;
   height: 20px;
-  color: #667eea;
+  color: #80A84D;
   flex-shrink: 0;
 }
 

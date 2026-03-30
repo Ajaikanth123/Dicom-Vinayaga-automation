@@ -73,7 +73,7 @@
 .input-control:focus {
   outline: none;
   border-color: var(--primary-color);
-  box-shadow: 0 0 0 3px rgba(46, 125, 111, 0.1);
+  box-shadow: 0 0 0 3px rgba(128, 168, 77, 0.1);
 }
 
 .input-control:disabled {
@@ -133,7 +133,7 @@
 }
 
 .checkbox-label:hover {
-  background: rgba(46, 125, 111, 0.05);
+  background: rgba(128, 168, 77, 0.05);
 }
 
 .checkbox-input {
@@ -175,7 +175,7 @@
 .checkbox-children {
   margin-left: 30px;
   padding: 12px;
-  background: rgba(46, 125, 111, 0.03);
+  background: rgba(128, 168, 77, 0.03);
   border-radius: 8px;
   border-left: 3px solid var(--primary-light);
 }
@@ -231,12 +231,12 @@
 
 .file-upload-box:hover {
   border-color: var(--primary-color);
-  background: rgba(46, 125, 111, 0.03);
+  background: rgba(128, 168, 77, 0.03);
 }
 
 .file-upload-box.dragging {
   border-color: var(--primary-color);
-  background: rgba(46, 125, 111, 0.08);
+  background: rgba(128, 168, 77, 0.08);
   border-style: solid;
 }
 

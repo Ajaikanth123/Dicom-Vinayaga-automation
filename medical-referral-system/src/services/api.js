@@ -795,3 +795,45 @@ export const uploadReport = async (formId, reportFile, formData, branchId, isRep
     throw error;
   }
 };
+
+/**
+ * Upload patient image (Stage 1) and send email to doctor
+ * @param {string} formId - Case/Form ID
+ * @param {File} imageFile - Image file (jpg/png)
+ * @param {Object} formData - Full form data
+ * @param {string} branchId - Branch ID
+ * @returns {Promise<Object>} Upload result with imageUrl
+ */
+export const uploadPatientImage = async (formId, imageFile, formData, branchId) => {
+  try {
+    console.log('[API] uploadPatientImage called:', { formId, fileName: imageFile.name, branchId });
+
+    const fd = new FormData();
+    fd.append('patientImage', imageFile);
+    fd.append('formId', formId);
+    fd.append('branchId', branchId);
+    fd.append('patientName', formData.patient?.patientName || '');
+    fd.append('patientId', formData.patient?.patientId || '');
+    fd.append('doctorEmail', formData.doctor?.emailWhatsapp || '');
+    fd.append('doctorName', formData.doctor?.doctorName || '');
+    fd.append('hospital', formData.doctor?.hospital || '');
+    fd.append('clinicalNotes', formData.clinicalNotes || '');
+
+    const response = await fetch(`${API_BASE}/upload/patient-image`, {
+      method: 'POST',
+      body: fd
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.error || 'Patient image upload failed');
+    }
+
+    const result = await response.json();
+    console.log('[API] Patient image upload successful:', result);
+    return result;
+  } catch (error) {
+    console.error('[API] Patient image upload error:', error);
+    throw error;
+  }
+};

@@ -351,7 +351,7 @@ const CreateForm = () => {
           </p>
           {viewerUrl && (
             <p className="success-detail" style={{ marginTop: '10px', color: '#10b981' }}>
-              ✓ 3D Anbu Viewer opened in new tab
+              ✓ C Scans Kovai Viewer opened in new tab
             </p>
           )}
         </div>

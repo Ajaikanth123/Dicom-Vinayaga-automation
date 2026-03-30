@@ -13,7 +13,7 @@
 /* ===== Left Panel — Decorative Brand Side ===== */
 .login-brand-panel {
   flex: 1;
-  background: linear-gradient(135deg, #1a4d44 0%, #2e7d6f 40%, #3d9b8a 70%, #4ab8a5 100%);
+  background: linear-gradient(135deg, #4a6b2a 0%, #80A84D 40%, #6a9040 70%, #9bc463 100%);
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -281,9 +281,9 @@
 
 .input-field:focus {
   outline: none;
-  border-color: #2e7d6f;
+  border-color: #80A84D;
   background: #fff;
-  box-shadow: 0 0 0 4px rgba(46, 125, 111, 0.08);
+  box-shadow: 0 0 0 4px rgba(128, 168, 77, 0.08);
 }
 
 .input-field::placeholder {
@@ -312,7 +312,7 @@
 }
 
 .password-toggle:hover {
-  color: #2e7d6f;
+  color: #80A84D;
 }
 
 /* ===== Form Options ===== */
@@ -337,7 +337,7 @@
   width: 16px;
   height: 16px;
   cursor: pointer;
-  accent-color: #2e7d6f;
+  accent-color: #80A84D;
   border-radius: 4px;
 }
 
@@ -345,7 +345,7 @@
 .login-button {
   width: 100%;
   padding: 16px;
-  background: linear-gradient(135deg, #2e7d6f 0%, #3d9b8a 100%);
+  background: linear-gradient(135deg, #80A84D 0%, #6a9040 100%);
   border: none;
   border-radius: 12px;
   color: #fff;
@@ -358,7 +358,7 @@
   align-items: center;
   justify-content: center;
   gap: 8px;
-  box-shadow: 0 4px 14px rgba(46, 125, 111, 0.3);
+  box-shadow: 0 4px 14px rgba(128, 168, 77, 0.3);
   position: relative;
   overflow: hidden;
   letter-spacing: 0.3px;
@@ -380,8 +380,8 @@
 }
 
 .login-button:hover:not(:disabled) {
-  background: linear-gradient(135deg, #267063 0%, #349083 100%);
-  box-shadow: 0 6px 20px rgba(46, 125, 111, 0.4);
+  background: linear-gradient(135deg, #6a9040 0%, #5e7d38 100%);
+  box-shadow: 0 6px 20px rgba(128, 168, 77, 0.4);
   transform: translateY(-2px);
 }
 
@@ -481,7 +481,7 @@
 .create-account-button {
   width: 100%;
   padding: 16px;
-  background: linear-gradient(135deg, #2e7d6f 0%, #3d9b8a 100%);
+  background: linear-gradient(135deg, #80A84D 0%, #6a9040 100%);
   border: none;
   border-radius: 12px;
   color: #fff;
@@ -494,15 +494,15 @@
   align-items: center;
   justify-content: center;
   gap: 8px;
-  box-shadow: 0 4px 14px rgba(46, 125, 111, 0.3);
+  box-shadow: 0 4px 14px rgba(128, 168, 77, 0.3);
   letter-spacing: 0.3px;
   overflow: hidden;
   position: relative;
 }
 
 .create-account-button:hover:not(:disabled) {
-  background: linear-gradient(135deg, #267063 0%, #349083 100%);
-  box-shadow: 0 6px 20px rgba(46, 125, 111, 0.4);
+  background: linear-gradient(135deg, #6a9040 0%, #5e7d38 100%);
+  box-shadow: 0 6px 20px rgba(128, 168, 77, 0.4);
   transform: translateY(-2px);
 }
 
@@ -522,7 +522,7 @@
 }
 
 .back-to-login:hover {
-  color: #2e7d6f;
+  color: #80A84D;
 }
 
 /* ===== Success Message ===== */
@@ -562,7 +562,7 @@
 
   .login-container {
     justify-content: center;
-    background: linear-gradient(135deg, #f0faf7 0%, #f8fafb 50%, #f0f7f5 100%);
+    background: linear-gradient(135deg, #f4f8ee 0%, #f8fafb 50%, #f2f7ec 100%);
   }
 
   .login-form-panel {
@@ -596,12 +596,12 @@
   .logo-icon {
     width: 56px;
     height: 56px;
-    background: linear-gradient(135deg, #2e7d6f, #3d9b8a);
+    background: linear-gradient(135deg, #80A84D, #6a9040);
     border-radius: 14px;
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 4px 12px rgba(46, 125, 111, 0.25);
+    box-shadow: 0 4px 12px rgba(128, 168, 77, 0.25);
     animation: none;
     font-size: 0;
   }

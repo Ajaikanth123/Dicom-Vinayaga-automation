@@ -24,11 +24,13 @@ steps:
       - 'managed'
       - '--allow-unauthenticated'
       - '--memory'
-      - '2Gi'
+      - '4Gi'
+      - '--cpu'
+      - '2'
       - '--timeout'
       - '3600'
       - '--max-instances'
-      - '10'
+      - '3'
 
 images:
   - 'gcr.io/$PROJECT_ID/dicom-backend:v1-final'

@@ -121,7 +121,7 @@ async function getOrganizationSettings(branchId = null) {
 
   // Fallback to default
   return {
-    name: '3D Anbu Dental Diagnostics LLP',
+    name: 'C Scans Kovai',
     email: process.env.EMAIL_USER || '',
     phone: '',
     address: '',
@@ -145,10 +145,42 @@ export async function sendDoctorNotification(doctorData, patientData, caseData, 
     
     const { doctorName, doctorEmail, hospital } = doctorData;
     const { patientName, patientId } = patientData;
-    const { viewerLink, caseId, studyDate, diagnosticServices, reasonForReferral, clinicalNotes } = caseData;
+    const { viewerLink, caseId, studyDate, diagnosticServices, reasonForReferral, clinicalNotes, patientImageUrl, isStage1 } = caseData;
 
     if (!doctorEmail) {
       throw new Error('Doctor email is required');
+    }
+
+    // For Stage 1 (image only), send a simpler email
+    if (isStage1) {
+      const transporter = await createTransporter(branchId);
+      const orgSettings = await getOrganizationSettings(branchId);
+      const mailOptions = {
+        from: `"${orgSettings.name}" <${orgSettings.email || process.env.EMAIL_USER}>`,
+        to: doctorEmail,
+        subject: `🦷 New Patient Referral - ${patientName}`,
+        html: `
+          <div style="font-family:Arial,sans-serif;max-width:600px;margin:0 auto">
+            <div style="background:linear-gradient(135deg,#80A84D,#5e7d38);color:white;padding:30px;border-radius:10px 10px 0 0;text-align:center">
+              <h1 style="margin:0">🦷 New Patient Referral</h1>
+              <p style="margin:8px 0 0;opacity:.9">${orgSettings.name}</p>
+            </div>
+            <div style="background:#f9f9f9;padding:30px;border-radius:0 0 10px 10px">
+              <p>Dear Dr. ${doctorName},</p>
+              <p>A new patient has been referred. Please review the image and advise if a DICOM scan is required.</p>
+              <div style="background:white;padding:20px;border-left:4px solid #80A84D;border-radius:5px;margin:20px 0">
+                <p><strong style="color:#80A84D">👤 Patient:</strong> ${patientName}</p>
+                <p><strong style="color:#80A84D">🆔 ID:</strong> ${patientId}</p>
+                ${clinicalNotes ? `<p><strong style="color:#80A84D">📝 Notes:</strong> ${clinicalNotes}</p>` : ''}
+              </div>
+              ${patientImageUrl ? `<div style="margin:20px 0"><h3 style="color:#80A84D">🖼️ Patient Image</h3><img src="${patientImageUrl}" style="max-width:100%;border-radius:8px;border:2px solid #80A84D" alt="Patient Image"/></div>` : ''}
+              <p style="color:#666;font-size:13px;margin-top:20px">Stage 1 of 3 — Image only. DICOM scan and report will follow.</p>
+            </div>
+          </div>`,
+        text: `Dear Dr. ${doctorName},\n\nNew patient referral: ${patientName} (${patientId})\n${clinicalNotes ? `Notes: ${clinicalNotes}\n` : ''}\nPatient image: ${patientImageUrl || 'N/A'}\n\n${orgSettings.name}`
+      };
+      const info = await transporter.sendMail(mailOptions);
+      return { success: true, messageId: info.messageId, sentAt: new Date().toISOString(), recipient: doctorEmail };
     }
 
     // Prepare sender information for display
@@ -258,17 +290,18 @@ export async function sendDoctorNotification(doctorData, patientData, caseData, 
           <style>
             body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
             .container { max-width: 600px; margin: 0 auto; padding: 20px; }
-            .header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 30px; text-align: center; border-radius: 10px 10px 0 0; }
+            .header { background: linear-gradient(135deg, #80A84D 0%, #5e7d38 100%); color: white; padding: 30px; text-align: center; border-radius: 10px 10px 0 0; }
             .content { background: #f9f9f9; padding: 30px; border-radius: 0 0 10px 10px; }
-            .info-box { background: white; padding: 20px; margin: 20px 0; border-left: 4px solid #667eea; border-radius: 5px; }
+            .info-box { background: white; padding: 20px; margin: 20px 0; border-left: 4px solid #80A84D; border-radius: 5px; }
             .info-row { margin: 10px 0; }
-            .label { font-weight: bold; color: #667eea; }
-            .button { display: inline-block; padding: 15px 30px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; text-decoration: none; border-radius: 5px; margin: 20px 0; font-weight: bold; }
+            .label { font-weight: bold; color: #80A84D; }
+            .button { display: inline-block; padding: 15px 30px; background: linear-gradient(135deg, #80A84D 0%, #5e7d38 100%); color: white; text-decoration: none; border-radius: 5px; margin: 20px 0; font-weight: bold; }
             .button:hover { opacity: 0.9; }
             .footer { text-align: center; margin-top: 30px; color: #666; font-size: 12px; }
             .icon { font-size: 24px; margin-right: 10px; }
             .logo { max-width: 200px; margin-bottom: 15px; }
             h3 { margin-bottom: 15px; }
+            .patient-img { max-width: 100%; border-radius: 8px; margin: 15px 0; border: 2px solid #80A84D; }
           </style>
         </head>
         <body>
@@ -284,6 +317,12 @@ export async function sendDoctorNotification(doctorData, patientData, caseData, 
               ${senderNote}
               
               <p>A new DICOM scan is ready for your review:</p>
+              
+              ${patientImageUrl ? `
+              <div class="info-box">
+                <h3 style="color:#80A84D;margin-top:0">🖼️ Patient Image</h3>
+                <img src="${patientImageUrl}" alt="Patient Image" class="patient-img" />
+              </div>` : ''}
               
               <div class="info-box">
                 <div class="info-row">
@@ -604,18 +643,13 @@ export default {
  */
 export async function sendReportNotification(data) {
   try {
-    const { doctorEmail, doctorName, patientName, reportUrl, branchId } = data;
+    const { doctorEmail, doctorName, patientName, reportUrl, branchId, patientImageUrl, viewerLink } = data;
     
     const transporter = await createTransporter(branchId);
     const orgSettings = await getOrganizationSettings(branchId);
 
-    if (!doctorEmail) {
-      throw new Error('Doctor email is required');
-    }
-
-    if (!reportUrl) {
-      throw new Error('Report URL is required');
-    }
+    if (!doctorEmail) throw new Error('Doctor email is required');
+    if (!reportUrl) throw new Error('Report URL is required');
 
     const mailOptions = {
       from: `"${orgSettings.name}" <${orgSettings.email || process.env.EMAIL_USER}>`,
@@ -628,17 +662,17 @@ export async function sendReportNotification(data) {
           <style>
             body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
             .container { max-width: 600px; margin: 0 auto; padding: 20px; }
-            .header { background: linear-gradient(135deg, #27ae60 0%, #229954 100%); color: white; padding: 30px; text-align: center; border-radius: 10px 10px 0 0; }
+            .header { background: linear-gradient(135deg, #80A84D 0%, #5e7d38 100%); color: white; padding: 30px; text-align: center; border-radius: 10px 10px 0 0; }
             .content { background: #f9f9f9; padding: 30px; border-radius: 0 0 10px 10px; }
-            .info-box { background: white; padding: 20px; margin: 20px 0; border-left: 4px solid #27ae60; border-radius: 5px; }
+            .info-box { background: white; padding: 20px; margin: 20px 0; border-left: 4px solid #80A84D; border-radius: 5px; }
             .info-row { margin: 10px 0; }
-            .label { font-weight: bold; color: #27ae60; }
-            .button { display: inline-block; padding: 15px 30px; background: linear-gradient(135deg, #27ae60 0%, #229954 100%); color: white; text-decoration: none; border-radius: 5px; margin: 20px 0; font-weight: bold; font-size: 16px; }
-            .button:hover { opacity: 0.9; }
+            .label { font-weight: bold; color: #80A84D; }
+            .button { display: inline-block; padding: 15px 30px; background: linear-gradient(135deg, #80A84D 0%, #5e7d38 100%); color: white; text-decoration: none; border-radius: 5px; margin: 10px 5px; font-weight: bold; font-size: 16px; }
             .footer { text-align: center; margin-top: 30px; color: #666; font-size: 12px; }
             .icon { font-size: 48px; margin-bottom: 15px; }
             .logo { max-width: 200px; margin-bottom: 15px; }
-            .highlight { background: #e8f8f5; padding: 15px; border-radius: 5px; margin: 20px 0; text-align: center; }
+            .highlight { background: #f4f8ee; padding: 15px; border-radius: 5px; margin: 20px 0; text-align: center; }
+            .patient-img { max-width: 100%; border-radius: 8px; margin: 15px 0; border: 2px solid #80A84D; }
           </style>
         </head>
         <body>
@@ -651,67 +685,21 @@ export async function sendReportNotification(data) {
             </div>
             <div class="content">
               <p>Dear Dr. ${doctorName},</p>
-              
-              <div class="highlight">
-                <h2 style="margin: 0; color: #27ae60;">📄 Your diagnostic report has been generated</h2>
+              <div class="highlight"><h2 style="margin:0;color:#80A84D">📄 Diagnostic report for ${patientName} is ready</h2></div>
+              ${patientImageUrl ? `<div class="info-box"><h3 style="color:#80A84D;margin-top:0">🖼️ Patient Image</h3><img src="${patientImageUrl}" alt="Patient Image" class="patient-img" /></div>` : ''}
+              <div style="text-align:center">
+                ${viewerLink ? `<a href="${viewerLink}" class="button">🔍 View DICOM Scan</a>` : ''}
+                <a href="${reportUrl}" class="button">📄 View Report</a>
               </div>
-              
-              <p>The diagnostic report for <strong>${patientName}</strong> is now ready for your review.</p>
-              
-              <div class="info-box">
-                <div class="info-row">
-                  <span class="label">👤 Patient Name:</span> ${patientName}
-                </div>
-                <div class="info-row">
-                  <span class="label">📅 Report Generated:</span> ${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}
-                </div>
-                <div class="info-row">
-                  <span class="label">📋 Report Type:</span> Diagnostic Report (PDF)
-                </div>
-              </div>
-
-              <p>Click the button below to view or download the report:</p>
-              
-              <div style="text-align: center;">
-                <a href="${reportUrl}" class="button" target="_blank">📄 View Report</a>
-              </div>
-
-              <p style="margin-top: 30px; font-size: 14px; color: #666;">
-                The report will open in your browser and can be downloaded for your records. 
-                This link provides secure access to the PDF document.
-              </p>
+              <p style="margin-top:20px;font-size:13px;color:#666">This email contains all 3 stages: patient image, DICOM scan link, and diagnostic report.</p>
             </div>
             <div class="footer">
-              <p>${orgSettings.name}<br>
-              ${orgSettings.address || ''}<br>
-              ${orgSettings.phone ? `Phone: ${orgSettings.phone}<br>` : ''}
-              ${orgSettings.email ? `Email: ${orgSettings.email}` : ''}</p>
-              <p style="margin-top: 15px; font-size: 11px; color: #999;">
-                This email contains confidential medical information. If you received this in error, please delete it immediately.
-              </p>
+              <p>${orgSettings.name}${orgSettings.phone ? `<br>Phone: ${orgSettings.phone}` : ''}${orgSettings.email ? `<br>Email: ${orgSettings.email}` : ''}</p>
             </div>
           </div>
         </body>
-        </html>
-      `,
-      text: `
-Dear Dr. ${doctorName},
-
-Your diagnostic report has been generated!
-
-The diagnostic report for ${patientName} is now ready for your review.
-
-Patient Name: ${patientName}
-Report Generated: ${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}
-Report Type: Diagnostic Report (PDF)
-
-View the report here: ${reportUrl}
-
-${orgSettings.name}
-${orgSettings.address || ''}
-${orgSettings.phone ? `Phone: ${orgSettings.phone}` : ''}
-${orgSettings.email ? `Email: ${orgSettings.email}` : ''}
-      `
+        </html>`,
+      text: `Dear Dr. ${doctorName},\n\nThe diagnostic report for ${patientName} is ready.\n\n${viewerLink ? `DICOM Viewer: ${viewerLink}\n` : ''}Report: ${reportUrl}\n\n${orgSettings.name}`
     };
 
     const info = await transporter.sendMail(mailOptions);

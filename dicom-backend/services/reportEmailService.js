@@ -94,7 +94,7 @@ async function getOrgSettings(branchId = null) {
   }
 
   return {
-    name: '3D Anbu Dental Diagnostics LLP',
+    name: 'C Scans Kovai',
     email: process.env.EMAIL_USER || '',
     phone: '',
     address: '',
@@ -777,7 +777,7 @@ This email contains confidential medical information. If you received this in er
  */
 export async function sendReportCompletionEmail(data) {
   try {
-    const { doctorEmail, doctorName, patientName, reportUrl, branchId, patientId, isReplacement = false } = data;
+    const { doctorEmail, doctorName, patientName, reportUrl, branchId, patientId, isReplacement = false, patientImageUrl = null, viewerLink = null } = data;
     
     console.log('[Report Email] Sending report completion notification with PDF attachment...');
     
@@ -824,6 +824,19 @@ export async function sendReportCompletionEmail(data) {
     // Generate filename for attachment
     const fileName = `Report_${patientName.replace(/\s+/g, '_')}_${patientId || Date.now()}.pdf`;
 
+    // Build extra HTML for patient image and DICOM link (Stage 3 additions)
+    const extraHtml = `
+      ${patientImageUrl ? `<div style="margin:20px 0;padding:20px;background:white;border-left:4px solid #80A84D;border-radius:5px"><h3 style="color:#80A84D;margin-top:0">🖼️ Patient Image</h3><img src="${patientImageUrl}" style="max-width:100%;border-radius:8px;border:2px solid #80A84D" alt="Patient Image"/></div>` : ''}
+      ${viewerLink ? `<div style="text-align:center;margin:20px 0"><a href="${viewerLink}" style="display:inline-block;padding:12px 24px;background:linear-gradient(135deg,#80A84D,#5e7d38);color:white;text-decoration:none;border-radius:5px;font-weight:bold">🔍 View DICOM Scan</a></div>` : ''}
+    `;
+
+    const baseHtml = isReplacement
+      ? generateReplacementEmailHTML(doctorName, patientName, currentDate, currentTime, fileName, orgSettings)
+      : generateCompletionEmailHTML(doctorName, patientName, currentDate, currentTime, fileName, orgSettings);
+
+    // Inject extra content before the footer
+    const finalHtml = baseHtml.replace('<!-- Footer -->', `${extraHtml}<!-- Footer -->`);
+
     const mailOptions = {
       from: `"${orgSettings.name}" <${orgSettings.email || process.env.EMAIL_USER}>`,
       to: doctorEmail,
@@ -835,7 +848,7 @@ export async function sendReportCompletionEmail(data) {
           contentType: 'application/pdf'
         }
       ],
-      html: isReplacement ? generateReplacementEmailHTML(doctorName, patientName, currentDate, currentTime, fileName, orgSettings) : generateCompletionEmailHTML(doctorName, patientName, currentDate, currentTime, fileName, orgSettings),
+      html: finalHtml,
       text: isReplacement ? generateReplacementEmailText(doctorName, patientName, currentDate, currentTime, fileName, orgSettings) : generateCompletionEmailText(doctorName, patientName, currentDate, currentTime, fileName, orgSettings)
     };
 

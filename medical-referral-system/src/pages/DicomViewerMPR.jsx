@@ -613,7 +613,7 @@ const DicomViewerMPR = () => {
   return (
     <div className="dicom-viewer-mpr-container">
       <div className="viewer-header">
-        <h1>3D Anbu Viewer</h1>
+        <h1>C Scans Kovai Viewer</h1>
         <div className="patient-info">
           <p><strong>Patient:</strong> {metadata?.patientName || 'N/A'}</p>
           <p><strong>Patient ID:</strong> {metadata?.patientID || 'N/A'}</p>

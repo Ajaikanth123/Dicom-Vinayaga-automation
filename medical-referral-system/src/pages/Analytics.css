@@ -116,7 +116,7 @@
 }
 
 .analytics-card.total-patients .card-icon {
-  background: linear-gradient(135deg, #2e7d6f, #3d9d8d);
+  background: linear-gradient(135deg, #80A84D, #3d9d8d);
   color: white;
 }
 
@@ -270,15 +270,15 @@
 }
 
 .branch-table tbody tr:hover {
-  background: rgba(46, 125, 111, 0.03);
+  background: rgba(128, 168, 77, 0.03);
 }
 
 .branch-table tbody tr.top-branch {
-  background: rgba(46, 125, 111, 0.06);
+  background: rgba(128, 168, 77, 0.06);
 }
 
 .branch-table tbody tr.top-branch:hover {
-  background: rgba(46, 125, 111, 0.1);
+  background: rgba(128, 168, 77, 0.1);
 }
 
 /* Branch Column */
